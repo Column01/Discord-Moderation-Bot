@@ -18,7 +18,7 @@ async def check_punishments(client):
             for user_info in muted_users.items():
                 user_id = int(user_info[0])
                 duration = int(user_info[1]["duration"])
-                normal_duration = int(user_info[1]["normal_duration"])
+                normal_duration = user_info[1]["normal_duration"]
                 if -1 < duration < int(time.time()):
                     # Mute is expired. Remove it from the user and remove it from the guild's storage
                     user = guild.get_member(user_id)
@@ -28,7 +28,7 @@ async def check_punishments(client):
                     # Build a mute expire embed and message it to the log channel 
                     embed_builder = EmbedBuilder(event="muteexpire")
                     await embed_builder.add_field(name="**Unmuted user**", value=f"`{user.name}`")
-                    await embed_builder.add_field(name="**Mute duration**", value=f"`{normal_duration} seconds`")
+                    await embed_builder.add_field(name="**Mute duration**", value=f"`{normal_duration}`")
                     embed = await embed_builder.get_embed()
                     await log_channel.send(embed=embed)
                     

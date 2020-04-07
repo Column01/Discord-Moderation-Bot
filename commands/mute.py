@@ -2,7 +2,7 @@ import time
 
 import discord
 
-from helpers.misc_functions import is_number, is_valid_duration
+from helpers.misc_functions import is_number, is_valid_duration, parse_duration
 from helpers.embed_builder import EmbedBuilder
 
 class UnMuteCommand:
@@ -106,17 +106,18 @@ class TempMuteCommand:
         self.storage = client_instance.storage
         self.usage = f"Usage: {self.client.prefix}tempmute <user id> <duration> [reason]"
         self.invalid_user = "There is no user with the userID: {user_id}. {usage}"
-        self.invalid_duration = "The duration provided is invalid. The duration must be a number above zero in seconds. {usage}"
+        self.invalid_duration = "The duration provided is invalid. The duration must be a string that looks like: 1w3d5h30m20s or a positive number in seconds. {usage}"
         self.not_enough_arguments = "You must provide a user to temp mute. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
     
     async def handle(self, message, command):
         if len(command) >= 3:
             if is_number(command[1]):
-                if is_valid_duration(command[2]):
+                duration = parse_duration(command[2])
+                if is_valid_duration(duration):
                     guild_id = str(message.guild.id)
                     user_id = int(command[1])
-                    duration = int(time.time() + int(command[2]))
+                    mute_duration = int(time.time() + duration)
                     muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
                     user = message.guild.get_member(user_id)
                     muted_role = message.guild.get_role(muted_role_id)
@@ -132,17 +133,17 @@ class TempMuteCommand:
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)] = {}
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["duration"] = duration
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["reason"] = reason
-                        self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["normal_duration"] = int(command[2])
+                        self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["normal_duration"] = command[2]
                         await self.storage.write_settings_file_to_disk()
                         # Message the channel
-                        await message.channel.send(f"**Temporarily muted user:** `{user.name}` **for:** `{command[2]}` **seconds. Reason:** `{reason}`")
+                        await message.channel.send(f"**Temporarily muted user:** `{user.name}` **for:** `{command[2]}` **. Reason:** `{reason}`")
                         
                         # Build the embed and message it to the log channel
                         embed_builder = EmbedBuilder(event="tempmute")
                         await embed_builder.add_field(name="**Executor**", value=f"`{message.author.name}`")
                         await embed_builder.add_field(name="**Muted user**", value=f"`{user.name}`")
                         await embed_builder.add_field(name="**Reason**", value=f"`{reason}`")
-                        await embed_builder.add_field(name="**Duration**", value=f"`{command[2]} seconds`")
+                        await embed_builder.add_field(name="**Duration**", value=f"`{command[2]}`")
                         embed = await embed_builder.get_embed()
                         log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])
                         log_channel = message.guild.get_channel(log_channel_id)
