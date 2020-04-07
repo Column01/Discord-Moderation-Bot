@@ -28,7 +28,7 @@ class UnMuteCommand:
                     self.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))
                     await self.storage.write_settings_file_to_disk()
                     # Message the channel
-                    await message.channel.send(f"**Unmuted user:** `{user.name}`.")
+                    await message.channel.send(f"**Unmuted user:** `{user.name}`**.**")
                     
                     # Build the embed and message it to the log channel
                     embed_builder = EmbedBuilder(event="unmute")
@@ -79,7 +79,7 @@ class MuteCommand:
                     self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["normal_duration"] = -1
                     await self.storage.write_settings_file_to_disk()
                     # Message the channel
-                    await message.channel.send(f"**Permanently muted user:** `{user.name}`. **Reason:** `{reason}`")
+                    await message.channel.send(f"**Permanently muted user:** `{user.name}`**. Reason:** `{reason}`")
                     
                     # Build the embed and message it to the log channel
                     embed_builder = EmbedBuilder(event="mute")
@@ -117,7 +117,7 @@ class TempMuteCommand:
                 if is_valid_duration(duration):
                     guild_id = str(message.guild.id)
                     user_id = int(command[1])
-                    mute_duration = int(time.time() + duration)
+                    mute_duration = int(time.time()) + duration
                     muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
                     user = message.guild.get_member(user_id)
                     muted_role = message.guild.get_role(muted_role_id)
@@ -131,12 +131,12 @@ class TempMuteCommand:
                         # Add the muted role and store them in guilds muted users list. We use -1 as the duration to state that it lasts forever.
                         await user.add_roles(muted_role, reason=f"Muted by {message.author.name}")
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)] = {}
-                        self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["duration"] = duration
+                        self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["duration"] = mute_duration
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["reason"] = reason
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["normal_duration"] = command[2]
                         await self.storage.write_settings_file_to_disk()
                         # Message the channel
-                        await message.channel.send(f"**Temporarily muted user:** `{user.name}` **for:** `{command[2]}` **. Reason:** `{reason}`")
+                        await message.channel.send(f"**Temporarily muted user:** `{user.name}` **for:** `{command[2]}`**. Reason:** `{reason}`")
                         
                         # Build the embed and message it to the log channel
                         embed_builder = EmbedBuilder(event="tempmute")

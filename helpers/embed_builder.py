@@ -9,15 +9,15 @@ class EmbedBuilder:
         elif event == "tempmute":
             self.embed = discord.Embed(title="Temp Muted user", description="A user was Temp Muted", color=0xff8000)
         elif event == "unmute":
-            self.embed = discord.Embed(title="Un-Muted user", description="A user was Un-Muted", color=0x00ff00)
+            self.embed = discord.Embed(title="Unmuted user", description="A user was Unmuted", color=0x00ff00)
         elif event == "tempban":
             self.embed = discord.Embed(title="Temp Banned user", description="A user was Temp Banned", color=0xff0000)
         elif event == "unban":
-            self.embed = discord.Embed(title="Un-Banned user", description="A user was Un-Banned", color=0x00ff00)
+            self.embed = discord.Embed(title="Unbanned user", description="A user was Unbanned", color=0x00ff00)
         elif event == "banexpire":
-            self.embed = discord.Embed(title="Ban Expired", description="A user's ban expired", color=0xff8000)
+            self.embed = discord.Embed(title="Temp Ban Expired", description="A user's temp ban expired", color=0xff8000)
         elif event == "muteexpire":
-            self.embed = discord.Embed(title="Temp-Mute Expired", description="A user's temp mute expired", color=0x00ff00)
+            self.embed = discord.Embed(title="Temp Mute Expired", description="A user's temp mute expired", color=0x00ff00)
         else:
             self.embed = discord.Embed(title=event)
         
