@@ -38,4 +38,7 @@ def parse_duration(s):
                 num = int("".join(tempnums))
                 tempnums.clear()
                 nums.append(num * multiple)
-        return sum(nums)
+        if len(nums) > 0:
+            return sum(nums)
+        else:
+            return -1

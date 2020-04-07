@@ -56,4 +56,3 @@ class StorageManagement:
         self.settings["guilds"][guild_id]["banned_users"] = {}
         await self.write_settings_file_to_disk()
         await self.load_settings()
-        

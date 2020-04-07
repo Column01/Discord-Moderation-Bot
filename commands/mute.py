@@ -2,8 +2,9 @@ import time
 
 import discord
 
-from helpers.misc_functions import is_number, is_valid_duration, parse_duration
 from helpers.embed_builder import EmbedBuilder
+from helpers.misc_functions import is_number, is_valid_duration, parse_duration
+
 
 class UnMuteCommand:
     def __init__(self, client_instance):
@@ -150,7 +151,7 @@ class TempMuteCommand:
                         if log_channel is not None:
                             await log_channel.send(embed=embed)
                     else:
-                        await message.channel.send()
+                        await message.channel.send(self.invalid_user.format(user_id=user_id, usage=self.usage))
                 else:
                     await message.channel.send(self.invalid_user.format(user_id=user_id, usage=self.usage))
             else:

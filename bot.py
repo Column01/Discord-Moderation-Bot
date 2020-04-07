@@ -1,13 +1,17 @@
 import json
 import os
+import time
 
 import discord
 
+from commands.ban import TempBanCommand, UnBanCommand
+from commands.mute import MuteCommand, TempMuteCommand, UnMuteCommand
 from helpers.embed_builder import EmbedBuilder
 from storage_management import StorageManagement
-from commands.mute import TempMuteCommand, MuteCommand, UnMuteCommand
-from commands.ban import TempBanCommand, UnBanCommand
 from tasks.check_punishments import check_punishments
+from tasks.member_join import MemberJoin
+from tasks.message_delete import MessageDelete
+
 
 class ModerationBot(discord.Client):
     def __init__(self):
@@ -43,9 +47,8 @@ class ModerationBot(discord.Client):
     async def on_message(self, message):
         user = message.author
         # Ignore messages from ourselves or other bots
-        if user == self.user or user.bot:
+        if user == self.user or user.bot or len(message.content) == 0:
             return
-        
         # Split the message into a list of command arguments where command[0] is the command that was run and afterwards is the arguments.
         command = message.content.split()
         # If the first part of the message starts with the command prefix, interpret it as a command
@@ -78,21 +81,12 @@ class ModerationBot(discord.Client):
         await self.storage.write_settings_file_to_disk()
         
     async def on_message_delete(self, message):
-        # Ignore deletes of bot messages or messages from ourselves
-        if message.author == self.user or message.author.bot:
-            return
-        embed_builder = EmbedBuilder(event="delete")
-        await embed_builder.add_field(name="**Channel**", value=f"`#{message.channel.name}`")
-        await embed_builder.add_field(name="**Author**", value=f"`{message.author.name}`")
-        await embed_builder.add_field(name="**Message**", value=f"`{message.content}`")
-        await embed_builder.add_field(name="**Created at**", value=f"`{message.created_at}`")
-        embed = await embed_builder.get_embed()
-        
-        guild_id = str(message.guild.id)
-        log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])
-        log_channel = discord.utils.get(message.guild.text_channels, id=log_channel_id)
-        if log_channel is not None:
-            await log_channel.send(embed=embed)
+        message_delete = MessageDelete(self)
+        await message_delete.handle(message)
+            
+    async def on_member_join(self, member):
+        member_join = MemberJoin(self)
+        await member_join.handle(member)
 
     ### DISCORD CLIENT EVENTS END HERE ###
     
