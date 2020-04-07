@@ -52,6 +52,8 @@ class StorageManagement:
         self.settings["guilds"][guild_id] = {}
         self.settings["guilds"][guild_id]["muted_role_id"] = 0
         self.settings["guilds"][guild_id]["log_channel_id"] = 0
+        self.settings["guilds"][guild_id]["muted_users"] = {}
+        self.settings["guilds"][guild_id]["banned_users"] = {}
         await self.write_settings_file_to_disk()
         await self.load_settings()
         
