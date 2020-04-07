@@ -7,15 +7,19 @@ class EmbedBuilder:
         elif event == "mute":
             self.embed = discord.Embed(title="Muted user", description="A user was Muted", color=0xff8000)
         elif event == "tempmute":
-            self.embed = discord.Embed(title="Temp-Muted user", description="A user was Temp-Muted", color=0xff8000)
+            self.embed = discord.Embed(title="Temp Muted user", description="A user was Temp Muted", color=0xff8000)
         elif event == "unmute":
             self.embed = discord.Embed(title="Un-Muted user", description="A user was Un-Muted", color=0x00ff00)
         elif event == "tempban":
             self.embed = discord.Embed(title="Temp Banned user", description="A user was Temp Banned", color=0xff0000)
         elif event == "unban":
             self.embed = discord.Embed(title="Un-Banned user", description="A user was Un-Banned", color=0x00ff00)
+        elif event == "banexpire":
+            self.embed = discord.Embed(title="Ban Expired", description="A user's ban expired", color=0xff8000)
+        elif event == "muteexpire":
+            self.embed = discord.Embed(title="Temp-Mute Expired", description="A user's temp mute expired", color=0x00ff00)
         else:
-            self.embed = discord.Embed(title="Embed")
+            self.embed = discord.Embed(title=event)
         
     async def add_field(self, name, value, inline=False):
         self.embed.add_field(name=name, value=value, inline=inline)

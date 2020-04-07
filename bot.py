@@ -7,6 +7,7 @@ from helpers.embed_builder import EmbedBuilder
 from storage_management import StorageManagement
 from commands.mute import TempMuteCommand, MuteCommand, UnMuteCommand
 from commands.ban import TempBanCommand, UnBanCommand
+from tasks.check_punishments import check_punishments
 
 class ModerationBot(discord.Client):
     def __init__(self):
@@ -37,6 +38,7 @@ class ModerationBot(discord.Client):
         await self.storage.init()
         for guild in self.guilds:
             await self.setup_guild(guild)
+        self.loop.create_task(check_punishments(self))
     
     async def on_message(self, message):
         user = message.author
