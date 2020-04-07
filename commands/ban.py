@@ -2,7 +2,6 @@ import discord
 
 
 class UnBanCommand:
-    
     def __init__(self, client_instance):
         self.client = client_instance
         self.storage = client_instance.storage
@@ -12,7 +11,6 @@ class UnBanCommand:
     
 
 class TempBanCommand:
-    
     def __init__(self, client_instance):
         self.client = client_instance
         self.storage = client_instance.storage

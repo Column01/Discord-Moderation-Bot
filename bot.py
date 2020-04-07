@@ -3,12 +3,12 @@ import os
 
 import discord
 
+from helpers.embed_builder import EmbedBuilder
 from storage_management import StorageManagement
 from commands.mute import TempMuteCommand, MuteCommand, UnMuteCommand
 from commands.ban import TempBanCommand, UnBanCommand
 
 class ModerationBot(discord.Client):
-    
     def __init__(self):
         # Change to whatever prefix you want
         self.prefix = "mym!"
@@ -55,7 +55,7 @@ class ModerationBot(discord.Client):
                 mute = MuteCommand(self)
                 await mute.handle(message, command)
             elif command[0] == self.prefix + "unmute":
-                un_mute = MuteCommand(self)
+                un_mute = UnMuteCommand(self)
                 await un_mute.handle(message, command)
             elif command[0] == self.prefix + "tempban":
                 temp_ban = TempBanCommand(self)
@@ -74,6 +74,23 @@ class ModerationBot(discord.Client):
         print(f"Removing guild from guild storage since they removed the bot. Guild name: {guild.name}")
         self.storage.settings.pop(guild.id)
         await self.storage.write_settings_file_to_disk()
+        
+    async def on_message_delete(self, message):
+        # Ignore deletes of bot messages or messages from ourselves
+        if message.author == self.user or message.author.bot:
+            return
+        embed_builder = EmbedBuilder(event="delete")
+        await embed_builder.add_field(name="**Channel**", value=f"`#{message.channel.name}`")
+        await embed_builder.add_field(name="**Author**", value=f"`{message.author.name}`")
+        await embed_builder.add_field(name="**Message**", value=f"`{message.content}`")
+        await embed_builder.add_field(name="**Created at**", value=f"`{message.created_at}`")
+        embed = await embed_builder.get_embed()
+        
+        guild_id = str(message.guild.id)
+        log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])
+        log_channel = discord.utils.get(message.guild.text_channels, id=log_channel_id)
+        if log_channel is not None:
+            await log_channel.send(embed=embed)
 
     ### DISCORD CLIENT EVENTS END HERE ###
     

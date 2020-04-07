@@ -2,3 +2,4 @@ settings.json
 token.txt
 
 **__pycache__/
+*.code-workspace
