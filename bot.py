@@ -9,7 +9,9 @@ from commands.mute import MuteCommand, TempMuteCommand, UnMuteCommand
 from helpers.embed_builder import EmbedBuilder
 from storage_management import StorageManagement
 from tasks.check_punishments import check_punishments
+from tasks.member_ban import MemberBan
 from tasks.member_join import MemberJoin
+from tasks.member_kick import MemberKick
 from tasks.message_delete import MessageDelete
 
 
@@ -42,6 +44,7 @@ class ModerationBot(discord.Client):
         await self.storage.init()
         for guild in self.guilds:
             await self.setup_guild(guild)
+        # Register some tasks
         self.loop.create_task(check_punishments(self))
     
     async def on_message(self, message):
@@ -87,6 +90,15 @@ class ModerationBot(discord.Client):
     async def on_member_join(self, member):
         member_join = MemberJoin(self)
         await member_join.handle(member)
+        
+    async def on_member_ban(self, guild, member):
+        member_ban = MemberBan(self)
+        await member_ban.handle(guild)
+        
+    async def on_member_remove(self, member):
+        # Closest thing we have to kick event.
+        member_kick = MemberKick(self)
+        await member_kick.handle(member.guild)
 
     ### DISCORD CLIENT EVENTS END HERE ###
     
