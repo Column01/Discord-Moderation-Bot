@@ -1,9 +1,6 @@
 # MyM Moderation Bot
 A bot for moderating users on discord
 
-## Important Info
-Ban is not implemented yet
-
 ## Requirements
 - [**Python**](https://www.python.org/downloads/) *version 3.6+*
 - [**discord.py**](https://pypi.org/project/discord.py/) *version 1.3.3*
@@ -12,6 +9,7 @@ Install python and run: `pip install discord.py==1.3.3`
 
 ## Command Info
 
+- Default prefix: `mym!`
 - `<argument>` = **Required argument**
 - `[argument]` = **Optional argument**
 - Durations can either be a formatted time that looks like the following: (`1w2d3h4m5s`) or time in seconds.
@@ -43,4 +41,3 @@ You should follow the discord guide [here](https://support.discordapp.com/hc/en-
 - Enable developer mode in discord
 - Right click their username in chat or on the sidebar
 - Click `Copy ID`
-
