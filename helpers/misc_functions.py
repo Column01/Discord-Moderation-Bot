@@ -34,7 +34,7 @@ def parse_duration(s):
             if char.isdigit():
                 tempnums.append(char)
             else:
-                multiple = values.get(char)
+                multiple = values.get(char, 1)
                 num = int("".join(tempnums))
                 tempnums.clear()
                 nums.append(num * multiple)
