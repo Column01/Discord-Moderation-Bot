@@ -37,7 +37,7 @@ class MemberJoin:
                     await log_channel.send(embed=embed)
                 else:
                     # Mute is not expired. Re-add it to the offender
-                    await user.add_roles(muted_role, reason="Remuted user since they had an active mute when they rejoined")
+                    await user.add_roles(muted_role, reason="Remuted user since they had an active mute when they rejoined the server")
         
         for mute in mutes_to_remove:
             self.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))

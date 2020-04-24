@@ -83,6 +83,16 @@ class ModerationBot(discord.Client):
         self.storage.settings.pop(guild.id)
         await self.storage.write_settings_file_to_disk()
         
+    async def on_guild_channel_create(self, channel):
+        guild = channel.guild
+        guild_id = str(guild.id)
+        muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
+        muted_role = discord.utils.get(guild.roles, id=muted_role_id)
+        if muted_role is not None:
+            await channel.set_permissions(target=muted_role, overwrite=self.muted_permissions)
+        else:
+            return
+
     async def on_message_delete(self, message):
         message_delete = MessageDelete(self)
         await message_delete.handle(message)
@@ -123,7 +133,9 @@ class ModerationBot(discord.Client):
             muted_role = await guild.create_role(name="muted")
             self.storage.settings["guilds"][guild_id]["muted_role_id"] = muted_role.id
             await self.storage.write_settings_file_to_disk()
-    
+        else:
+            return
+        
     async def add_muted_role_to_channels(self, guild):
         guild_id = str(guild.id)
         # Get the muted role ID from disk and then get it from discord
@@ -153,6 +165,8 @@ class ModerationBot(discord.Client):
             await log_channel.send("I created this channel for moderation logs. Please edit the channel permissions to allow what users you want to see this channel.")
             self.storage.settings["guilds"][guild_id]["log_channel_id"] = log_channel.id
             await self.storage.write_settings_file_to_disk()
+        else:
+            return
 
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))          
