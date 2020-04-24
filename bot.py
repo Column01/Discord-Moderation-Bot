@@ -129,6 +129,11 @@ class ModerationBot(discord.Client):
         # Get the muted role ID from disk and then get it from discord
         muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
         muted_role = discord.utils.get(guild.roles, id=muted_role_id)
+        if muted_role is None:
+            # Run the role check again to make sure they didn't delete the role or something went wrong in the flow of things.
+            await self.check_for_muted_role(guild)
+            muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
+            muted_role = discord.utils.get(guild.roles, id=muted_role_id)
         # Edit all text and voice channels to deny the muted role from talking or doing certain actions
         for text_channel in guild.text_channels:
             await text_channel.set_permissions(target=muted_role, overwrite=self.muted_permissions)
