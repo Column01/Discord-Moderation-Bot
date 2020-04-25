@@ -5,6 +5,7 @@ import time
 import discord
 
 from commands.ban import TempBanCommand, UnBanCommand
+from commands.mod import ModCommand
 from commands.mute import MuteCommand, TempMuteCommand, UnMuteCommand
 from helpers.embed_builder import EmbedBuilder
 from storage_management import StorageManagement
@@ -56,7 +57,10 @@ class ModerationBot(discord.Client):
         command = message.content.split()
         # If the first part of the message starts with the command prefix, interpret it as a command
         if command[0][:self.prefix_length] == self.prefix:
-            if command[0] == self.prefix + "tempmute":
+            if command[0] == self.prefix + "mod":
+                mod_command = ModCommand(self)
+                await mod_command.handle(message, command)
+            elif command[0] == self.prefix + "tempmute":
                 temp_mute = TempMuteCommand(self)
                 await temp_mute.handle(message, command)
             elif command[0] == self.prefix + "mute":
@@ -72,7 +76,7 @@ class ModerationBot(discord.Client):
                 un_ban = UnBanCommand(self)
                 await un_ban.handle(message, command)
             else:
-                await message.channel.send(f"Unknown command: {message.content}")
+                await message.channel.send(f"**Unknown command:** `{message.content}`")
                 
     async def on_guild_join(self, guild):
         print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")

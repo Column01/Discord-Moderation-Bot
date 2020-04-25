@@ -42,3 +42,19 @@ def parse_duration(s):
             return sum(nums)
         else:
             return -1
+        
+        
+def author_is_admin(author):
+    return author.guild_permissions.administrator
+    
+# Returns if the author is a mod or not. Also checks if they have the admin perm
+async def author_is_mod(author, storage):
+    if author_is_admin(author):
+        return True
+    guild_id = str(author.guild.id)
+    mod_roles = storage.settings["guilds"][guild_id].get("mod_roles")
+    if mod_roles is None:
+        settings["guilds"][guild_id]["mod_roles"] = []
+        await storage.write_settings_file_to_disk()
+        mod_roles = storage.settings["guilds"][guild_id].get("mod_roles")
+    return set(mod_roles) & set(author.roles)

@@ -14,9 +14,15 @@ Install python and run: `pip install discord.py==1.3.3`
 - `[argument]` = **Optional argument**
 - Durations can either be a formatted time that looks like the following: (`1w2d3h4m5s`) or time in seconds.
 - Durations can also use single types like `2m` or `1w` for example
+- All commands require you to be in a moderator role. See the commands below on how to add or remove a mod role (requires admin permission to add mod roles)
 - Read how to get the User ID [here](#how-to-get-user-id)
 
 ### Commands
+
+- `mym!mod <add|remove|list> <role ID>`
+	- Adds, removes the role ID to the list of moderator roles.
+	- If you want to `list` the roles, you do not need the role ID at the end.
+
 - `mym!mute <user ID> [reason]`
 	- Permanently mutes the user. Must be unmuted manually.
 
