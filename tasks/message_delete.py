@@ -2,6 +2,7 @@ import discord
 
 from helpers.embed_builder import EmbedBuilder
 
+
 class MessageDelete:
     def __init__(self, client_instance):
         self.client = client_instance

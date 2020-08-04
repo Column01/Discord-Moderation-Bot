@@ -29,7 +29,7 @@ class MemberJoin:
                     # Mute is expired. Remove it from the guild's storage
                     mutes_to_remove.append(user_id)
                     
-                    # Build a mute expire embed and message it to the log channel 
+                    # Build a mute expire embed and message it to the log channel
                     embed_builder = EmbedBuilder(event="muteexpire")
                     await embed_builder.add_field(name="**Unmuted user**", value=f"`{user.name}`")
                     await embed_builder.add_field(name="**Mute duration**", value=f"`{normal_duration}`")

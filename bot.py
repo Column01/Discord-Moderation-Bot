@@ -1,13 +1,10 @@
-import json
 import os
-import time
 
 import discord
 
 from commands.ban import TempBanCommand, UnBanCommand
 from commands.mod import ModCommand
 from commands.mute import MuteCommand, TempMuteCommand, UnMuteCommand
-from helpers.embed_builder import EmbedBuilder
 from storage_management import StorageManagement
 from tasks.check_punishments import check_punishments
 from tasks.member_ban import MemberBan
@@ -19,12 +16,12 @@ from tasks.message_delete import MessageDelete
 class ModerationBot(discord.Client):
     def __init__(self):
         # Change to whatever prefix you want
-        self.prefix = "mym!"
+        self.prefix = "!"
         self.prefix_length = len(self.prefix)
         self.storage = StorageManagement()
         # Permissions for the muted role and for the default role
-        self.muted_permissions =  discord.PermissionOverwrite(
-            send_messages=False, 
+        self.muted_permissions = discord.PermissionOverwrite(
+            send_messages=False,
             add_reactions=False,
             attach_files=False,
             speak=False,
@@ -37,7 +34,7 @@ class ModerationBot(discord.Client):
         # Start the discord client
         discord.Client.__init__(self)
     
-    ### DISCORD CLIENT EVENTS START HERE ###
+    ''' DISCORD CLIENT EVENTS START HERE '''
     
     async def on_ready(self):
         print(f"Logged in as {self.user}")
@@ -114,7 +111,7 @@ class ModerationBot(discord.Client):
         member_kick = MemberKick(self)
         await member_kick.handle(member.guild)
 
-    ### DISCORD CLIENT EVENTS END HERE ###
+    ''' DISCORD CLIENT EVENTS END HERE '''
     
     async def setup_guild(self, guild):
         # Add the guild to the settings file if it doesn't exist
@@ -173,7 +170,7 @@ class ModerationBot(discord.Client):
             return
 
 
-__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))          
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 if __name__ == "__main__":
     # Read the token from a file and strip newlines (Fixes issues when running the bot on linux)
     token = open(os.path.join(__location__, "token.txt"), "r").read().strip("\n")

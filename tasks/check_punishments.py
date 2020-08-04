@@ -29,14 +29,14 @@ async def check_punishments(client):
                     await user.remove_roles(muted_role, reason="Temp mute expired.")
                     mutes_to_remove.append(user_id)
                     
-                    # Build a mute expire embed and message it to the log channel 
+                    # Build a mute expire embed and message it to the log channel
                     embed_builder = EmbedBuilder(event="muteexpire")
                     await embed_builder.add_field(name="**Unmuted user**", value=f"`{user.name}`")
                     await embed_builder.add_field(name="**Mute duration**", value=f"`{normal_duration}`")
                     embed = await embed_builder.get_embed()
                     await log_channel.send(embed=embed)
                     
-            # Loop over all the mutes to remove and remove them from the storage. 
+            # Loop over all the mutes to remove and remove them from the storage.
             # (This is done aftewards since if we do it in the loop, python complains the dict size changed)
             for user_id in mutes_to_remove:
                 client.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))
@@ -65,7 +65,7 @@ async def check_punishments(client):
                     embed = await embed_builder.get_embed()
                     await log_channel.send(embed=embed)
                     
-            # Loop over all the mutes to remove and remove them from the storage. 
+            # Loop over all the mutes to remove and remove them from the storage.
             # (This is done aftewards since if we do it in the loop, python complains the dict size changed)
             for user_id in bans_to_remove:
                 client.storage.settings["guilds"][guild_id]["banned_users"].pop(str(user_id))

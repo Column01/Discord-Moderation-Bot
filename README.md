@@ -1,4 +1,4 @@
-# MyM Moderation Bot
+# Discord Moderation Bot
 A bot for moderating users on discord
 
 ## Requirements
@@ -9,7 +9,7 @@ Install python and run: `pip install discord.py==1.3.3`
 
 ## Command Info
 
-- Default prefix: `mym!`
+- Default prefix: `!`
 - `<argument>` = **Required argument**
 - `[argument]` = **Optional argument**
 - Durations can either be a formatted time that looks like the following: (`1w2d3h4m5s`) or time in seconds.
@@ -19,24 +19,24 @@ Install python and run: `pip install discord.py==1.3.3`
 
 ### Commands
 
-- `mym!mod <add|remove|list> <role ID>`
+- `!mod <add|remove|list> <role ID>`
 	- Adds, removes the role ID to the list of moderator roles.
 	- If you want to `list` the roles, you do not need the role ID at the end.
 
-- `mym!mute <user ID> [reason]`
+- `!mute <user ID> [reason]`
 	- Permanently mutes the user. Must be unmuted manually.
 
-- `mym!tempmute <user ID> <duration> [reason]`
+- `!tempmute <user ID> <duration> [reason]`
 	- Temporarily mutes the user.
 
-- `mym!unmute <user ID>`
+- `!unmute <user ID>`
 	- Unmutes the user
 
-- `mym!tempban <user ID> <duration> <reason>`
+- `!tempban <user ID> <duration> <reason>`
 	- Temporarily bans the user from the server
 	- Reason is required. If you do not have a reason, you should not be banning them.
 
-- `mym!unban <user ID>`
+- `!unban <user ID>`
 	- Unbans the user from the server.
 
 ### How to get user ID

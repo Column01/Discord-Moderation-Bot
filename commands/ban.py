@@ -1,6 +1,5 @@
 import time
 
-import discord
 
 from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import is_number, is_valid_duration, parse_duration, author_is_mod
@@ -70,7 +69,7 @@ class TempBanCommand:
                         ban_duration = int(time.time()) + duration
                         user = message.guild.get_member(user_id)
                         # Collects everything after the first three items in the command and uses it as a reason.
-                        temp  = [item for item in command if command.index(item) > 2]
+                        temp = [item for item in command if command.index(item) > 2]
                         reason = " ".join(temp)
                         if user is not None:
                             # Add the muted role and store them in guilds muted users list. We use -1 as the duration to state that it lasts forever.

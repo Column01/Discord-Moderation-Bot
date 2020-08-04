@@ -1,7 +1,5 @@
 import time
 
-import discord
-
 from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import is_number, is_valid_duration, parse_duration, author_is_mod
 
@@ -49,7 +47,8 @@ class UnMuteCommand:
                 await message.channel.send(self.not_enough_arguments.format(usage=self.usage))
         else:
             await message.channel.send("**You must be a moderator to use this command.**")
-    
+
+
 class MuteCommand:
     def __init__(self, client_instance):
         self.client = client_instance
@@ -70,7 +69,7 @@ class MuteCommand:
                     muted_role = message.guild.get_role(muted_role_id)
                     if len(command) >= 3:
                         # Collects everything after the first two items in the command and uses it as a reason.
-                        temp  = [item for item in command if command.index(item) > 1]
+                        temp = [item for item in command if command.index(item) > 1]
                         reason = " ".join(temp)
                     else:
                         reason = f"Muted by {message.author.name}"
@@ -130,7 +129,7 @@ class TempMuteCommand:
                         muted_role = message.guild.get_role(muted_role_id)
                         if len(command) >= 4:
                             # Collects everything after the first three items in the command and uses it as a reason.
-                            temp  = [item for item in command if command.index(item) > 2]
+                            temp = [item for item in command if command.index(item) > 2]
                             reason = " ".join(temp)
                         else:
                             reason = f"Temp muted by {message.author.name}"

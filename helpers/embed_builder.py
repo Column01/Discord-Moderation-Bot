@@ -1,5 +1,6 @@
 import discord
 
+
 class EmbedBuilder:
     def __init__(self, event):
         if event == "delete":

@@ -1,6 +1,3 @@
-import discord
-
-from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import is_number, author_is_admin
 
 
@@ -98,4 +95,4 @@ class ModCommand:
             mod_roles = ", ".join([str(i) for i in mod_roles])
             await message.channel.send(f"**Here is a list of all moderator roles:** `{mod_roles}`")
         else:
-            await message.channel.send(f"**You have not made any roles a moderator.**")
+            await message.channel.send("**You have not made any roles a moderator.**")
