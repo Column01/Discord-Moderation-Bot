@@ -6,10 +6,10 @@ class StorageManagement:
     def __init__(self):
         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         self.settings_file_path = os.path.join(__location__, "settings.json")
-        self.settings = None 
+        self.settings = None
             
     async def init(self):
-         # Create the settings file and load it
+        # Create the settings file and load it
         if await self.settings_file_exists():
             await self.load_settings()
         else:
