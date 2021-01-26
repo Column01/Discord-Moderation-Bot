@@ -22,7 +22,7 @@ class MemberJoin:
             user_id = int(user_info[0])
             duration = int(user_info[1]["duration"])
             normal_duration = user_info[1]["normal_duration"]
-            user = guild.get_member(user_id)
+            user = await guild.fetch_member(user_id)
             # if the user_id for this user_info matches the member who joined the guild
             if user_id == member.id:
                 if -1 < duration < int(time.time()):
@@ -39,6 +39,6 @@ class MemberJoin:
                     # Mute is not expired. Re-add it to the offender
                     await user.add_roles(muted_role, reason="Remuted user since they had an active mute when they rejoined the server")
         
-        for mute in mutes_to_remove:
+        for user_id in mutes_to_remove:
             self.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))
         await self.storage.write_settings_file_to_disk()

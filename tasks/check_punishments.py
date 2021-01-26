@@ -22,7 +22,7 @@ async def check_punishments(client):
                 normal_duration = user_info[1]["normal_duration"]
                 if -1 < duration < int(time.time()):
                     # Mute is expired. Remove it from the user and remove it from the guild's storage
-                    user = guild.get_member(user_id)
+                    user = await guild.fetch_member(user_id)
                     # Happens if they leave the guild. We re-add the role when they return though so this doesn't bypass the mute.
                     if user is None:
                         continue
