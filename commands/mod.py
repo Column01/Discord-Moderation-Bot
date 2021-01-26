@@ -1,23 +1,36 @@
-from helpers.misc_functions import is_number, author_is_admin
+import inspect
+import sys
+
+from helpers.misc_functions import author_is_admin, is_number
 
 
 class ModCommand:
     def __init__(self, client_instance):
+        self.cmd = "mod"
         self.client = client_instance
         self.storage = client_instance.storage
-        self.usage = f"Usage: {self.client.prefix}unmute <user id>"
+        self.usage = f"Usage: {self.client.prefix}mod <add|remove|list> <role_id>"
         self.not_a_valid_role = "Sorry, that role is not a valid role ID."
         self.invalid_option = "The option: {option} is not an option"
         self.not_enough_arguments = "You must provide a role to make a moderator role."
         self.role_already_mod = "That role ID is already listed as a mod."
     
-    async def handle(self, message, command):
+    def register_self(self):
+        from command_registry import registry
+        registry.register(self.cmd, self.__class__)
+
+    def unregister_self(self):
+        from command_registry import registry
+        registry.unregister(self.cmd)
+
+    async def execute(self, message, **kwargs):
+        command = kwargs.get("args")
         if author_is_admin(message.author):
-            if len(command) == 3:
+            if len(command) == 2:
                 guild_id = str(message.guild.id)
-                if command[1] == "add":
-                    if is_number(command[2]):
-                        role_id = int(command[2])
+                if command[0] == "add":
+                    if is_number(command[1]):
+                        role_id = int(command[1])
                         mod_role = message.guild.get_role(role_id)
                         # If the mod role exists
                         if mod_role is not None:
@@ -40,9 +53,9 @@ class ModCommand:
                             await message.channel.send(self.not_a_valid_role)
                     else:
                         await message.channel.send(self.not_a_valid_role)
-                elif command[1] == "remove":
-                    if is_number(command[2]):
-                        role_id = int(command[2])
+                elif command[0] == "remove":
+                    if is_number(command[1]):
+                        role_id = int(command[1])
                         # Get the mod role from the guild and assign the name as the role ID if it doesn't exist.
                         mod_role = message.guild.get_role(role_id)
                         if mod_role is None:
@@ -66,16 +79,16 @@ class ModCommand:
                             await message.channel.send(f"**The role ID** `{str(role_id)}` **is not a moderator role.**")
                     else:
                         await message.channel.send(self.not_a_valid_role)
-                elif command[1] == "list":
+                elif command[0] == "list":
                     await self.list_mods(message)
                 else:
-                    await message.channel.send(self.invalid_option.format(option=command[1]))
+                    await message.channel.send(self.invalid_option.format(option=command[0]))
 
-            elif len(command) == 2:
-                if command[1] == "list":
+            elif len(command) == 1:
+                if command[0] == "list":
                     await self.list_mods(message)
                 else:
-                    await message.channel.send(self.invalid_option.format(option=command[1]))
+                    await message.channel.send(self.invalid_option.format(option=command[0]))
             else:
                 await message.channel.send(self.not_enough_arguments)
         else:
@@ -96,3 +109,7 @@ class ModCommand:
             await message.channel.send(f"**Here is a list of all moderator roles:** `{mod_roles}`")
         else:
             await message.channel.send("**You have not made any roles a moderator.**")
+
+
+# Collects a list of classes in the file
+classes = inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__)

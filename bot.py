@@ -2,15 +2,14 @@ import os
 
 import discord
 
-from commands.ban import TempBanCommand, UnBanCommand
-from commands.mod import ModCommand
-from commands.mute import MuteCommand, TempMuteCommand, UnMuteCommand
 from storage_management import StorageManagement
 from tasks.check_punishments import check_punishments
 from tasks.member_ban import MemberBan
 from tasks.member_join import MemberJoin
 from tasks.member_kick import MemberKick
 from tasks.message_delete import MessageDelete
+
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
 class ModerationBot(discord.Client):
@@ -19,6 +18,14 @@ class ModerationBot(discord.Client):
         self.prefix = "!"
         self.prefix_length = len(self.prefix)
         self.storage = StorageManagement()
+
+        # Initialize the command registry
+        from command_registry import registry
+        self.registry = registry
+        self.registry.set_instance(self)
+        self.registry.register_commands()
+        print("The bot has been initialized with the following commands: " + ", ".join(self.registry.get_command_names()))
+
         # Permissions for the muted role and for the default role
         self.muted_permissions = discord.PermissionOverwrite(
             send_messages=False,
@@ -47,33 +54,21 @@ class ModerationBot(discord.Client):
     
     async def on_message(self, message):
         user = message.author
-        # Ignore messages from ourselves or other bots
-        if user == self.user or user.bot or len(message.content) == 0:
+        # Ignore messages from bots or if the message has no text.
+        if user.bot or not message.content:
             return
-        # Split the message into a list of command arguments where command[0] is the command that was run and afterwards is the arguments.
         command = message.content.split()
-        # If the first part of the message starts with the command prefix, interpret it as a command
-        if command[0][:self.prefix_length] == self.prefix:
-            if command[0] == self.prefix + "mod":
-                mod_command = ModCommand(self)
-                await mod_command.handle(message, command)
-            elif command[0] == self.prefix + "tempmute":
-                temp_mute = TempMuteCommand(self)
-                await temp_mute.handle(message, command)
-            elif command[0] == self.prefix + "mute":
-                mute = MuteCommand(self)
-                await mute.handle(message, command)
-            elif command[0] == self.prefix + "unmute":
-                un_mute = UnMuteCommand(self)
-                await un_mute.handle(message, command)
-            elif command[0] == self.prefix + "tempban":
-                temp_ban = TempBanCommand(self)
-                await temp_ban.handle(message, command)
-            elif command[0] == self.prefix + "unban":
-                un_ban = UnBanCommand(self)
-                await un_ban.handle(message, command)
+        # Grab the base command from the message. This leaves "command" with the command arguments afterwards
+        cmd = command.pop(0)
+        if cmd.startswith(self.prefix):
+            # Cut the prefix off the command
+            cmd = cmd[self.prefix_length:]
+            # Get the command handler and execute it
+            command_handler = self.registry.get_command(cmd)
+            if command_handler is not None:
+                await command_handler(self).execute(message, command=cmd, args=command, storage=self.storage, instance=self)
             else:
-                await message.channel.send(f"**Unknown command:** `{message.content}`")
+                await message.channel.send("**Unknown command:** {}".format(cmd))
                 
     async def on_guild_join(self, guild):
         print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
