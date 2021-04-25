@@ -2,12 +2,19 @@
 
 A bot for moderating users on discord!
 
+Please note: This bot was intended as a proof of concept for a concept I though of and as such support may be slow. Sorry if you tried to use this and it has issues, please just post an issue report and I will try to address it when possible.
+
 ## Requirements
 
 - [**Python**](https://www.python.org/downloads/) *version 3.6+*
 - [**discord.py**](https://pypi.org/project/discord.py/)
 
 Install python and run: `pip install discord.py`
+
+## Running the bot
+
+1. Place a text file named ``token.txt`` in the root directory (with `bot.py`) and place your auth token in it
+2. Open a command prompt and use ``python bot.py`` to run the bot.
 
 ## Command Info
 
@@ -61,11 +68,10 @@ You should follow the discord guide [here](https://support.discordapp.com/hc/en-
 2. Open `<your_command>.py` in a text editor
 3. Rename the class: `ReloadCommand` to a different name e.g.`TestCommand`
 4. Edit the `self.cmd` variable to be the command you wish to use e.g. `test`
-5. Inside the `self.execute` method, add the code that will run the command!
-5b. Please see below for info that command executors can obtain for use!
+5. Inside the `self.execute` method, add the code that will run the command! (Please see below for info that command executors can obtain for use!)
 6. Once you are done, save your file and use the `!reload` command to reload the command registry! You should be able to sue the new command!
 
-#### Available keyword arguments
+#### Available keyword arguments for command handlers
 
 Obtain each using `my_var = kwargs.get("key")` where `key` is an option from below
 
