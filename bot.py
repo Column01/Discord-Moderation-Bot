@@ -168,7 +168,14 @@ class ModerationBot(discord.Client):
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 if __name__ == "__main__":
     # Read the token from a file and strip newlines (Fixes issues when running the bot on linux)
-    token = open(os.path.join(__location__, "token.txt"), "r").read().strip("\n")
+    try:
+        token = open(os.path.join(__location__, "token.txt"), "r").read().strip("\n")
+    except FileNotFoundError:
+        print("Please create a token.txt file and place your token in it!")
+        quit()
+    if token is None:
+        print("Please create a token.txt file and place your token in it!")
+        quit()
     # Run the bot instance
     bot = ModerationBot()
     bot.run(token)
