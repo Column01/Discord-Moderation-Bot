@@ -1,8 +1,8 @@
-# Discord Moderation Bot
+# Modular Discord Moderation Bot
 
-A bot for moderating users on discord!
+A modular bot for moderating users on discord!
 
-Please note: This bot was intended as a proof of concept for a concept I though of and as such support may be slow. Sorry if you tried to use this and it has issues, please just post an issue report and I will try to address it when possible.
+Please note: This bot was intended as a proof of concept and support may be slow. Sorry if you tried to use this and it has issues, please just post an issue report and I will try to address it when possible.
 
 ## Requirements
 
@@ -69,7 +69,7 @@ You should follow the discord guide [here](https://support.discordapp.com/hc/en-
 3. Rename the class: `ReloadCommand` to a different name e.g.`TestCommand`
 4. Edit the `self.cmd` variable to be the command you wish to use e.g. `test`
 5. Inside the `self.execute` method, add the code that will run the command! (Please see below for info that command executors can obtain for use!)
-6. Once you are done, save your file and use the `!reload` command to reload the command registry! You should be able to sue the new command!
+6. Once you are done, save your file and use the `!reload` command to reload the command registry! You should be able to use the new command!
 
 #### Available keyword arguments for command handlers
 
