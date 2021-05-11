@@ -2,6 +2,7 @@ import discord
 
 
 class EmbedBuilder:
+    """The Embed builder class, used to wrap the discord embed object to make common embeds easier to use"""
     def __init__(self, event):
         embeds = {
             "delete": discord.Embed(title="Deleted Message", description="A message was Deleted", color=0xffff00),
@@ -18,7 +19,15 @@ class EmbedBuilder:
         self.embed = embeds.get(event) or discord.Embed(title=event)
         
     async def add_field(self, name, value, inline=False):
+        """Add a field to the embed
+
+        Args:
+            name (str): The name for the field
+            value (str): The contents of the field
+            inline (bool, optional): Whether to use an inline field. Defaults to False.
+        """
         self.embed.add_field(name=name, value=value, inline=inline)
 
     async def get_embed(self):
+        """Returns the embed object"""
         return self.embed

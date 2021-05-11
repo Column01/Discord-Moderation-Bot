@@ -1,7 +1,14 @@
 
 
-# Check if the string is a number
 def is_number(string):
+    """Checks if the string is a number
+
+    Args:
+        string (str): The string to check
+
+    Returns:
+        Boolean: Whether the string could be converted to a number or not
+    """
     try:
         int(string)
         return True
@@ -9,8 +16,15 @@ def is_number(string):
         return False
 
 
-# Check if the duration is a positive number
 def is_valid_duration(duration):
+    """Checks if the duration is a positive number
+
+    Args:
+        duration (int, str): The duration to validate
+
+    Returns:
+        Boolean: If it is a valid duration
+    """
     if is_number(duration):
         if int(duration) > 0:
             return True
@@ -20,9 +34,15 @@ def is_valid_duration(duration):
         return False
     
 
-# Parses a duration in seconds from a string that looks like: 1w3d10h30m20s.
-# String can also have duplicate values for each type or just be a time in seconds value as an integer
 def parse_duration(s):
+    """Parses a duration in seconds from a duration string
+
+    Args:
+        s (str): Duration string to parse (1w3d10h30m20s)
+
+    Returns:
+        int: The time in seconds of the duration string
+    """
     if is_number(s):
         return s
     else:
@@ -44,11 +64,27 @@ def parse_duration(s):
         
         
 def author_is_admin(author):
+    """Checks if the author is an administrator
+
+    Args:
+        author (discord.Member): Discord member object
+
+    Returns:
+        Boolean: If they are an administrator
+    """
     return author.guild_permissions.administrator
 
 
-# Returns if the author is a mod or not. Also checks if they have the admin perm
 async def author_is_mod(author, storage):
+    """Checks if the author is a mod or administrator
+
+    Args:
+        author (discord.Member): Discord member object
+        storage (StorageManagement): Instance of the storage management class
+
+    Returns:
+        Boolean: If they are a mod or administrator
+    """
     if author_is_admin(author):
         return True
     guild_id = str(author.guild.id)
