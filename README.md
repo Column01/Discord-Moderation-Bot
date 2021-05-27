@@ -83,3 +83,11 @@ Obtain each using `my_var = kwargs.get("key")` where `key` is an option from bel
   - An instance of the storage handler class. Really should only be used if you know what you are doing! See `storage_management.py` for the code of that class.
 - `instance`
   - An instance of the bot, should REALLY not be used but is available if absolutely needed
+
+#### Issues with custom commands?
+
+Ensure that:
+
+- Your command is a subclass of the base command class. (use `from commands.base import Command` and then define the class like this: `class MyCommand(Command):` so it is a subclass of it)
+- It has an `async def execute(self, message, **kwargs):` function to execute the command
+- It doesn't have basic python syntax errors.
