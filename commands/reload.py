@@ -1,19 +1,11 @@
 import inspect
 import sys
+from commands.base import Command
 
 
-class ReloadCommand:
+class ReloadCommand(Command):
     def __init__(self, _):
         self.cmd = "reload"
-
-    def register_self(self):
-        from command_registry import registry
-        self.registry = registry
-        self.registry.register(self.cmd, self.__class__)
-
-    def unregister_self(self):
-        from command_registry import registry
-        registry.unregister(self.cmd)
 
     async def execute(self, message, **kwargs):
         from command_registry import registry

@@ -6,8 +6,10 @@ from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import (author_is_mod, is_number,
                                     is_valid_duration, parse_duration)
 
+from commands.base import Command
 
-class UnBanCommand:
+
+class UnBanCommand(Command):
     def __init__(self, client_instance):
         self.cmd = "unban"
         self.client = client_instance
@@ -16,14 +18,6 @@ class UnBanCommand:
         self.invalid_user = "There is no user with the userID: {user_id}. {usage}"
         self.not_enough_arguments = "You must provide a user to unban. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
-    
-    def register_self(self):
-        from command_registry import registry
-        registry.register(self.cmd, self.__class__)
-
-    def unregister_self(self):
-        from command_registry import registry
-        registry.unregister(self.cmd)
 
     async def execute(self, message, **kwargs):
         command = kwargs.get("args")
@@ -60,7 +54,7 @@ class UnBanCommand:
             await message.channel.send("**You must be a moderator to use this command.**")
     
 
-class TempBanCommand:
+class TempBanCommand(Command):
     def __init__(self, client_instance):
         self.cmd = "ban"
         self.client = client_instance
@@ -70,14 +64,6 @@ class TempBanCommand:
         self.invalid_duration = "The duration provided is invalid. The duration must be a string that looks like: 1w3d5h30m20s or a positive number in seconds. {usage}"
         self.not_enough_arguments = "You must provide a user to ban. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
-
-    def register_self(self):
-        from command_registry import registry
-        registry.register(self.cmd, self.__class__)
-
-    def unregister_self(self):
-        from command_registry import registry
-        registry.unregister(self.cmd)
 
     async def execute(self, message, **kwargs):
         command = kwargs.get("args")

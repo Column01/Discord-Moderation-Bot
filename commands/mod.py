@@ -3,8 +3,10 @@ import sys
 
 from helpers.misc_functions import author_is_admin, is_number
 
+from commands.base import Command
 
-class ModCommand:
+
+class ModCommand(Command):
     def __init__(self, client_instance):
         self.cmd = "mod"
         self.client = client_instance
@@ -14,14 +16,6 @@ class ModCommand:
         self.invalid_option = "The option: {option} is not an option"
         self.not_enough_arguments = "You must provide a role to make a moderator role."
         self.role_already_mod = "That role ID is already listed as a mod."
-    
-    def register_self(self):
-        from command_registry import registry
-        registry.register(self.cmd, self.__class__)
-
-    def unregister_self(self):
-        from command_registry import registry
-        registry.unregister(self.cmd)
 
     async def execute(self, message, **kwargs):
         command = kwargs.get("args")

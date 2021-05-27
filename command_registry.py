@@ -1,6 +1,8 @@
-import os
 import importlib
+import os
 import sys
+
+from commands.base import Command
 
 
 class CommandRegistry:
@@ -44,6 +46,7 @@ class CommandRegistry:
         """
         # Import the script location and load all .py files from the commands directory
         from bot import __location__
+
         # Collects file names for all files in the commands directory that end in .py
         new_py_files = [py_file for py_file in os.listdir(os.path.join(__location__, "commands")) if os.path.splitext(py_file)[1] == ".py"]
         if len(new_py_files) != self.py_files:
@@ -66,12 +69,19 @@ class CommandRegistry:
         # Get all modules in all command folder, import them and register all commands inside of them
         for command_file in self.py_files:
             fname = os.path.splitext(command_file)[0]
+            # Ignore the base command file
+            if fname == "base":
+                continue
             command_module = importlib.import_module("commands.{}".format(fname))
             classes = command_module.classes
             for class_info in classes:
                 clazz = class_info[1](self.instance)
-                clazz.register_self()
-                del clazz
+                # Check if the command class is an instance of the base command
+                if isinstance(type(clazz), type(Command)):
+                    clazz.register_self()
+                    del clazz
+                else:
+                    print("Command class in file: {} is not a subclass of the base command class. Please fix this (see repository for details)!".format(fname))
 
     async def reload_commands(self):
         """ Gets the changed python files list and reloads the commands if there are changes """

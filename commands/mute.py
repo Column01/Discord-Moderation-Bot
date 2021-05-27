@@ -6,8 +6,10 @@ from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import (author_is_mod, is_number,
                                     is_valid_duration, parse_duration)
 
+from commands.base import Command
 
-class UnMuteCommand:
+
+class UnMuteCommand(Command):
     def __init__(self, client_instance):
         self.cmd = "unmute"
         self.client = client_instance
@@ -16,14 +18,6 @@ class UnMuteCommand:
         self.invalid_user = "There is no user with the userID: {user_id}. {usage}"
         self.not_enough_arguments = "You must provide a user to unmute. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
-
-    def register_self(self):
-        from command_registry import registry
-        registry.register(self.cmd, self.__class__)
-
-    def unregister_self(self):
-        from command_registry import registry
-        registry.unregister(self.cmd)
 
     async def execute(self, message, **kwargs):
         command = kwargs.get("args")
@@ -62,7 +56,7 @@ class UnMuteCommand:
             await message.channel.send("**You must be a moderator to use this command.**")
 
 
-class MuteCommand:
+class MuteCommand(Command):
     def __init__(self, client_instance):
         self.cmd = "mute"
         self.client = client_instance
@@ -71,14 +65,6 @@ class MuteCommand:
         self.invalid_user = "There is no user with the userID: {user_id}. {usage}"
         self.not_enough_arguments = "You must provide a user to mute. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
-
-    def register_self(self):
-        from command_registry import registry
-        registry.register(self.cmd, self.__class__)
-
-    def unregister_self(self):
-        from command_registry import registry
-        registry.unregister(self.cmd)
 
     async def execute(self, message, **kwargs):
         command = kwargs.get("args")
@@ -128,7 +114,7 @@ class MuteCommand:
             await message.channel.send("**You must be a moderator to use this command.**")
     
     
-class TempMuteCommand:
+class TempMuteCommand(Command):
     def __init__(self, client_instance):
         self.cmd = "tempmute"
         self.client = client_instance
@@ -138,14 +124,6 @@ class TempMuteCommand:
         self.invalid_duration = "The duration provided is invalid. The duration must be a string that looks like: 1w3d5h30m20s or a positive number in seconds. {usage}"
         self.not_enough_arguments = "You must provide a user to temp mute. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
-
-    def register_self(self):
-        from command_registry import registry
-        registry.register(self.cmd, self.__class__)
-
-    def unregister_self(self):
-        from command_registry import registry
-        registry.unregister(self.cmd)
 
     async def execute(self, message, **kwargs):
         command = kwargs.get("args")
