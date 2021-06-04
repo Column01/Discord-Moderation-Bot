@@ -42,8 +42,8 @@ Install python and run: `pip install discord.py`
 - `!unmute <user ID>`
   - Unmutes the user
 
-- `!tempban <user ID> <duration> <reason>`
-  - Temporarily bans the user from the server
+- `!ban <user ID> <duration> <reason>`
+  - Bans the user from the server for the duration specified
   - Reason is required. If you do not have a reason, you should not be banning them.
 
 - `!unban <user ID>`
