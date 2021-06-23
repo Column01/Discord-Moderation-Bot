@@ -6,7 +6,6 @@ from storage_management import StorageManagement
 from tasks.member_ban import MemberBan
 from tasks.member_join import MemberJoin
 from tasks.member_kick import MemberKick
-from tasks.message_delete import MessageDelete
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
@@ -74,10 +73,6 @@ class ModerationBot(discord.Client):
             await channel.set_permissions(target=muted_role, overwrite=self.muted_permissions)
         else:
             return
-
-    async def on_message_delete(self, message):
-        message_delete = MessageDelete(self)
-        await message_delete.handle(message)
             
     async def on_member_join(self, member):
         member_join = MemberJoin(self)
