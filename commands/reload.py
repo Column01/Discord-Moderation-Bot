@@ -8,11 +8,18 @@ class ReloadCommand(Command):
         self.cmd = "reload"
 
     async def execute(self, message, **kwargs):
-        from command_registry import registry
-        print("Reloading command modules...")
-        await registry.reload_commands()
-        print("New list of commands: " + ", ".join(registry.get_command_names()))
-        await message.channel.send("Reloaded commands!")
+        args = kwargs.get("args")
+        if args is not None and "events" in args:
+            from event_registry import event_registry
+            print("Reloading event handlers")
+            await event_registry.reload_events()
+            await message.channel.send("Reloaded event registry!")
+        else:
+            from command_registry import registry
+            print("Reloading command modules...")
+            await registry.reload_commands()
+            print("New list of commands: " + ", ".join(registry.get_command_names()))
+            await message.channel.send("Reloaded commands!")
 
 
 # Collects a list of classes in the file
