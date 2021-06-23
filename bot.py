@@ -3,7 +3,6 @@ import os
 import discord
 
 from storage_management import StorageManagement
-from tasks.check_punishments import check_punishments
 from tasks.member_ban import MemberBan
 from tasks.member_join import MemberJoin
 from tasks.member_kick import MemberKick
@@ -26,6 +25,12 @@ class ModerationBot(discord.Client):
         self.registry.register_commands()
         print("The bot has been initialized with the following commands: " + ", ".join(self.registry.get_command_names()))
 
+        # Initialize event registry
+        from event_registry import event_registry
+        self.event_registry = event_registry
+        self.event_registry.set_instance(self)
+        self.event_registry.register_events()
+
         # Permissions for the muted role and for the default role
         self.muted_permissions = discord.PermissionOverwrite(
             send_messages=False,
@@ -41,34 +46,15 @@ class ModerationBot(discord.Client):
         # Start the discord client
         discord.Client.__init__(self)
     
+    async def event_template(self, *args, **kwargs):
+        event_name = kwargs.get("event_name")
+        event_handlers = self.event_registry.get_event_handlers(event_name)
+        if event_handlers is not None:
+            for event_handler in event_handlers:
+                handler = event_handler(self)
+                await handler.handle(*args, **kwargs)
+    
     ''' DISCORD CLIENT EVENTS START HERE '''
-    
-    async def on_ready(self):
-        print(f"Logged in as {self.user}")
-        # Start the storage management and setup the guilds we are connected to.
-        await self.storage.init()
-        for guild in self.guilds:
-            await self.setup_guild(guild)
-        # Register some tasks
-        self.loop.create_task(check_punishments(self))
-    
-    async def on_message(self, message):
-        user = message.author
-        # Ignore messages from bots or if the message has no text.
-        if user.bot or not message.content:
-            return
-        command = message.content.split()
-        # Grab the base command from the message. This leaves "command" with the command arguments afterwards
-        cmd = command.pop(0)
-        if cmd.startswith(self.prefix):
-            # Cut the prefix off the command
-            cmd = cmd[self.prefix_length:]
-            # Get the command handler and execute it
-            command_handler = self.registry.get_command(cmd)
-            if command_handler is not None:
-                await command_handler(self).execute(message, command=cmd, args=command, storage=self.storage, instance=self)
-            else:
-                await message.channel.send("**Unknown command:** {}".format(cmd))
                 
     async def on_guild_join(self, guild):
         print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
