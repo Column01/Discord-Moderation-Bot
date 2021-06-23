@@ -3,9 +3,6 @@ import os
 import discord
 
 from storage_management import StorageManagement
-from tasks.member_ban import MemberBan
-from tasks.member_join import MemberJoin
-from tasks.member_kick import MemberKick
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
@@ -73,19 +70,6 @@ class ModerationBot(discord.Client):
             await channel.set_permissions(target=muted_role, overwrite=self.muted_permissions)
         else:
             return
-            
-    async def on_member_join(self, member):
-        member_join = MemberJoin(self)
-        await member_join.handle(member)
-        
-    async def on_member_ban(self, guild, member):
-        member_ban = MemberBan(self)
-        await member_ban.handle(guild)
-        
-    async def on_member_remove(self, member):
-        # Closest thing we have to kick event.
-        member_kick = MemberKick(self)
-        await member_kick.handle(member.guild)
 
     ''' DISCORD CLIENT EVENTS END HERE '''
     
