@@ -52,6 +52,9 @@ Install python and run: `pip install discord.py`
 - `!reload`
   - Reloads the command registry for any changes that were made to commands
 
+- `!reload events`
+  - Reloads the event registry for any changes that were made
+
 ### How to get user ID
 
 You should follow the discord guide [here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-)
