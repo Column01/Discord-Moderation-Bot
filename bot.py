@@ -26,6 +26,7 @@ class ModerationBot(discord.Client):
         self.event_registry = event_registry
         self.event_registry.set_instance(self)
         self.event_registry.register_events()
+        print("The bot has been initialized with the following events: " + ", ".join(self.event_registry.get_all_event_handlers()))
 
         # Permissions for the muted role and for the default role
         self.muted_permissions = discord.PermissionOverwrite(

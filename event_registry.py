@@ -84,7 +84,6 @@ class EventRegistry:
                 if isinstance(type(clazz), type(EventHandler)):
                     clazz.register_self()
                     event_name = clazz.event
-                    print("Registering event: " + event_name)
                     if event_name is not None:
                         setattr(self.instance, event_name, asyncio.coroutine(functools.partial(self.instance.event_template, event_name=event_name)))
                     else:
@@ -101,6 +100,9 @@ class EventRegistry:
             self.module_changes = False
             self.py_files = self.new_py_files
             self.register_events()
+        
+    def get_all_event_handlers(self):
+        return self.event_handlers.keys()
 
     def get_event_handlers(self, event):
         try:

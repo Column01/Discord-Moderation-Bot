@@ -13,6 +13,7 @@ class ReloadCommand(Command):
             from event_registry import event_registry
             print("Reloading event handlers")
             await event_registry.reload_events()
+            print("New list of registered event handlers: " + ", ".join(event_registry.get_all_event_handlers()))
             await message.channel.send("Reloaded event registry!")
         else:
             from command_registry import registry
