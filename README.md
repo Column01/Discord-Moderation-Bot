@@ -1,13 +1,17 @@
 # Modular Discord Moderation Bot
 
-A modular bot for moderating users on discord!
+A modular bot for moderating users on discord! Add custom commands and event handlers to customize the bot to your liking. Reload the bot using the builtin `!reload` or `!reload events` command to see your changes applied LIVE!
+
+[Adding your own commands](DEVELOPING.md#custom-commands)
+
+[Adding your own event handlers](DEVELOPING.md#custom-event-handlers)
 
 Please note: This bot was intended as a proof of concept and support may be slow. Sorry if you tried to use this and it has issues, please just post an issue report and I will try to address it when possible.
 
 ## Requirements
 
-- [**Python**](https://www.python.org/downloads/) *version 3.6+*
-- [**discord.py**](https://pypi.org/project/discord.py/)
+- [**Python**](https://www.python.org/downloads/) *version 3.6+ but just get the latest...*
+- [**discord.py**](https://pypi.org/project/discord.py/) *tested on version 1.7.3*
 
 Install python and run: `pip install discord.py`
 
@@ -25,9 +29,8 @@ Install python and run: `pip install discord.py`
 - Durations can also use single types like `2m` or `1w` for example
 - All commands require you to be in a moderator role. See the commands below on how to add or remove a mod role (requires admin permission to add mod roles)
 - Read how to get the User ID [here](#how-to-get-user-id)
-- Read how to add your own commands (and reload them on the fly!) [here](#adding-your-own-commands)
 
-### Commands
+## Commands
 
 - `!mod <add|remove|list> <role ID>`
   - Adds, removes the role ID to the list of moderator roles.
@@ -52,7 +55,10 @@ Install python and run: `pip install discord.py`
 - `!reload`
   - Reloads the command registry for any changes that were made to commands
 
-### How to get user ID
+- `!reload events`
+  - Reloads the event registry for any changes that were made
+
+## How to get user ID
 
 You should follow the discord guide [here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-)
 
@@ -62,29 +68,7 @@ You should follow the discord guide [here](https://support.discordapp.com/hc/en-
 - Right click their username in chat or on the sidebar
 - Click `Copy ID`
 
-### Adding your own commands
-
-1. You'll need to make a new file for your command. The best thing to do is copy `reload.py` inside the `commands` directory and rename it to the command name e.g. `test.py`
-2. Open `<your_command>.py` in a text editor
-3. Rename the class: `ReloadCommand` to a different name e.g.`TestCommand`
-4. Edit the `self.cmd` variable to be the command you wish to use e.g. `test`
-5. Inside the `self.execute` method, add the code that will run the command! (Please see below for info that command executors can obtain for use!)
-6. Once you are done, save your file and use the `!reload` command to reload the command registry! You should be able to use the new command!
-
-#### Available keyword arguments for command handlers
-
-Obtain each using `my_var = kwargs.get("key")` where `key` is an option from below
-
-- `command`
-  - The name of the command. In the example above, this would just be `test`
-- `args`
-  - A list of arguments following the `command`. This can be any length so ensure your code has proper checking for argument lengths and stuff
-- `storage`
-  - An instance of the storage handler class. Really should only be used if you know what you are doing! See `storage_management.py` for the code of that class.
-- `instance`
-  - An instance of the bot, should REALLY not be used but is available if absolutely needed
-
-#### Issues with custom commands?
+## Issues with custom commands?
 
 Ensure that:
 

@@ -1,5 +1,5 @@
 class Command:
-    def __init__(self):
+    def __init__(self, _):
         self.cmd = None
 
     def register_self(self):
@@ -10,5 +10,5 @@ class Command:
         from command_registry import registry
         registry.unregister(self.cmd)
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, *args, **kwargs):
         pass

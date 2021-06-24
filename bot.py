@@ -3,11 +3,6 @@ import os
 import discord
 
 from storage_management import StorageManagement
-from tasks.check_punishments import check_punishments
-from tasks.member_ban import MemberBan
-from tasks.member_join import MemberJoin
-from tasks.member_kick import MemberKick
-from tasks.message_delete import MessageDelete
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
@@ -26,6 +21,13 @@ class ModerationBot(discord.Client):
         self.registry.register_commands()
         print("The bot has been initialized with the following commands: " + ", ".join(self.registry.get_command_names()))
 
+        # Initialize event registry
+        from event_registry import event_registry
+        self.event_registry = event_registry
+        self.event_registry.set_instance(self)
+        self.event_registry.register_events()
+        print("The bot has been initialized with the following events: " + ", ".join(self.event_registry.get_all_event_handlers()))
+
         # Permissions for the muted role and for the default role
         self.muted_permissions = discord.PermissionOverwrite(
             send_messages=False,
@@ -41,34 +43,19 @@ class ModerationBot(discord.Client):
         # Start the discord client
         discord.Client.__init__(self)
     
-    ''' DISCORD CLIENT EVENTS START HERE '''
+    async def event_template(self, *args, **kwargs):
+        """ The template event function used to replicate event functions dynamically.
+        See event_registry.EventRegistry.register_events() where setattr() is used to add event handlers to this class
+        This basically allows us to write one cookie-cutter function instead of implementing the whole discord.py event API
+        """
+        event_name = kwargs.get("event_name")
+        event_handlers = self.event_registry.get_event_handlers(event_name)
+        if event_handlers is not None:
+            for event_handler in event_handlers:
+                handler = event_handler(self)
+                await handler.handle(*args, **kwargs)
     
-    async def on_ready(self):
-        print(f"Logged in as {self.user}")
-        # Start the storage management and setup the guilds we are connected to.
-        await self.storage.init()
-        for guild in self.guilds:
-            await self.setup_guild(guild)
-        # Register some tasks
-        self.loop.create_task(check_punishments(self))
-    
-    async def on_message(self, message):
-        user = message.author
-        # Ignore messages from bots or if the message has no text.
-        if user.bot or not message.content:
-            return
-        command = message.content.split()
-        # Grab the base command from the message. This leaves "command" with the command arguments afterwards
-        cmd = command.pop(0)
-        if cmd.startswith(self.prefix):
-            # Cut the prefix off the command
-            cmd = cmd[self.prefix_length:]
-            # Get the command handler and execute it
-            command_handler = self.registry.get_command(cmd)
-            if command_handler is not None:
-                await command_handler(self).execute(message, command=cmd, args=command, storage=self.storage, instance=self)
-            else:
-                await message.channel.send("**Unknown command:** {}".format(cmd))
+    """ DISCORD CLIENT EVENTS START HERE (DEPRECATED, USE EVENT HANDLERS!) """
                 
     async def on_guild_join(self, guild):
         print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
@@ -89,24 +76,7 @@ class ModerationBot(discord.Client):
         else:
             return
 
-    async def on_message_delete(self, message):
-        message_delete = MessageDelete(self)
-        await message_delete.handle(message)
-            
-    async def on_member_join(self, member):
-        member_join = MemberJoin(self)
-        await member_join.handle(member)
-        
-    async def on_member_ban(self, guild, member):
-        member_ban = MemberBan(self)
-        await member_ban.handle(guild)
-        
-    async def on_member_remove(self, member):
-        # Closest thing we have to kick event.
-        member_kick = MemberKick(self)
-        await member_kick.handle(member.guild)
-
-    ''' DISCORD CLIENT EVENTS END HERE '''
+    """ DISCORD CLIENT EVENTS END HERE (DEPRECATED, USE EVENT HANDLERS!) """
     
     async def setup_guild(self, guild):
         # Add the guild to the settings file if it doesn't exist
