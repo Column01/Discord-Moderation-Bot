@@ -1,5 +1,5 @@
 class Command:
-    def __init__(self):
+    def __init__(self, _):
         self.cmd = None
 
     def register_self(self):
