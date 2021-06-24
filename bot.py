@@ -43,6 +43,10 @@ class ModerationBot(discord.Client):
         discord.Client.__init__(self)
     
     async def event_template(self, *args, **kwargs):
+        """ The template event function used to replicate event functions dynamically.
+        See event_registry.EventRegistry.register_events() where setattr() is used to add event handlers to this class
+        This basically allows us to write one cookie-cutter function instead of implementing the whole discord.py event API
+        """
         event_name = kwargs.get("event_name")
         event_handlers = self.event_registry.get_event_handlers(event_name)
         if event_handlers is not None:
@@ -50,7 +54,7 @@ class ModerationBot(discord.Client):
                 handler = event_handler(self)
                 await handler.handle(*args, **kwargs)
     
-    ''' DISCORD CLIENT EVENTS START HERE '''
+    """ DISCORD CLIENT EVENTS START HERE (DEPRECATED, USE EVENT HANDLERS!) """
                 
     async def on_guild_join(self, guild):
         print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
@@ -71,7 +75,7 @@ class ModerationBot(discord.Client):
         else:
             return
 
-    ''' DISCORD CLIENT EVENTS END HERE '''
+    """ DISCORD CLIENT EVENTS END HERE (DEPRECATED, USE EVENT HANDLERS!) """
     
     async def setup_guild(self, guild):
         # Add the guild to the settings file if it doesn't exist
