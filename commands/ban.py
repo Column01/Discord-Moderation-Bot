@@ -2,6 +2,7 @@ import inspect
 import sys
 import time
 
+import discord
 from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import (author_is_mod, is_number,
                                     is_valid_duration, parse_duration)
@@ -26,7 +27,10 @@ class UnBanCommand(Command):
                 if is_number(command[0]):
                     user_id = int(command[0])
                     guild_id = str(message.guild.id)
-                    user = await message.guild.fetch_member(user_id)
+                    try:
+                        user = await message.guild.fetch_member(user_id)
+                    except discord.errors.NotFound or discord.errors.HTTPException:
+                        user = None
                     if user is not None:
                         # Unban the user and remove them from the guilds banned users list
                         await message.guild.unban(user, reason=f"Unbanned by {message.author.name}")
@@ -75,7 +79,10 @@ class TempBanCommand(Command):
                     if is_valid_duration(duration):
                         guild_id = str(message.guild.id)
                         ban_duration = int(time.time()) + duration
-                        user = await message.guild.fetch_member(user_id)
+                        try:
+                            user = await message.guild.fetch_member(user_id)
+                        except discord.errors.NotFound or discord.errors.HTTPException:
+                            user = None
                         # Collects everything after the first two items in the command and uses it as a reason.
                         temp = [item for item in command if command.index(item) > 1]
                         reason = " ".join(temp)

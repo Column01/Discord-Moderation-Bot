@@ -2,6 +2,7 @@ import inspect
 import sys
 import time
 
+import discord
 from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import (author_is_mod, is_number,
                                     is_valid_duration, parse_duration)
@@ -27,7 +28,10 @@ class UnMuteCommand(Command):
                     guild_id = str(message.guild.id)
                     user_id = int(command[0])
                     muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
-                    user = await message.guild.fetch_member(user_id)
+                    try:
+                        user = await message.guild.fetch_member(user_id)
+                    except discord.errors.NotFound or discord.errors.HTTPException:
+                        user = None
                     muted_role = message.guild.get_role(muted_role_id)
                     if user is not None:
                         # Remove the muted role from the user and remove them from the guilds muted users list
@@ -74,7 +78,10 @@ class MuteCommand(Command):
                     guild_id = str(message.guild.id)
                     user_id = int(command[0])
                     muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
-                    user = await message.guild.fetch_member(user_id)
+                    try:
+                        user = await message.guild.fetch_member(user_id)
+                    except discord.errors.NotFound or discord.errors.HTTPException:
+                        user = None
                     muted_role = message.guild.get_role(muted_role_id)
                     if len(command) >= 2:
                         # Collects everything after the first item in the command and uses it as a reason.
@@ -136,7 +143,10 @@ class TempMuteCommand(Command):
                         guild_id = str(message.guild.id)
                         mute_duration = int(time.time()) + duration
                         muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
-                        user = await message.guild.fetch_member(user_id)
+                        try:
+                            user = await message.guild.fetch_member(user_id)
+                        except discord.errors.NotFound or discord.errors.HTTPException:
+                            user = None
                         muted_role = message.guild.get_role(muted_role_id)
                         if len(command) >= 3:
                             # Collects everything after the first two items in the command and uses it as a reason.
