@@ -4,7 +4,7 @@ import time
 
 import discord
 from helpers.embed_builder import EmbedBuilder
-from helpers.misc_functions import (author_is_mod, is_number,
+from helpers.misc_functions import (author_is_mod, is_integer,
                                     is_valid_duration, parse_duration)
 
 from commands.base import Command
@@ -24,7 +24,7 @@ class UnBanCommand(Command):
         command = kwargs.get("args")
         if await author_is_mod(message.author, self.storage):
             if len(command) == 1:
-                if is_number(command[0]):
+                if is_integer(command[0]):
                     user_id = int(command[0])
                     guild_id = str(message.guild.id)
                     try:
@@ -73,7 +73,7 @@ class TempBanCommand(Command):
         command = kwargs.get("args")
         if await author_is_mod(message.author, self.storage):
             if len(command) >= 3:
-                if is_number(command[0]):
+                if is_integer(command[0]):
                     user_id = int(command[0])
                     duration = parse_duration(command[1])
                     if is_valid_duration(duration):

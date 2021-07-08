@@ -1,16 +1,36 @@
 
 
-def is_number(string):
-    """Checks if the string is a number
+def is_integer(string):
+    """Checks if the string is an integer
 
     Args:
         string (str): The string to check
 
     Returns:
-        Boolean: Whether the string could be converted to a number or not
+        Boolean: Whether the string could be converted to an integer or not
     """
     try:
         int(string)
+        return True
+    except ValueError:
+        return False
+
+
+# For compatiblity with existing code. This macro exists so people don't need to update to use `is_integer` in their code
+is_number = is_integer
+
+
+def is_float(string):
+    """Checks if the string is a float
+
+    Args:
+        string (str): The string to check
+
+    Returns:
+        Boolean: Whether the string could be converted to a float or not
+    """
+    try:
+        float(string)
         return True
     except ValueError:
         return False
@@ -25,7 +45,7 @@ def is_valid_duration(duration):
     Returns:
         Boolean: If it is a valid duration
     """
-    if is_number(duration):
+    if is_integer(duration):
         if int(duration) > 0:
             return True
         else:
@@ -43,7 +63,7 @@ def parse_duration(s):
     Returns:
         int: The time in seconds of the duration string
     """
-    if is_number(s):
+    if is_integer(s):
         return s
     else:
         values = {"w": 604800, "d": 86400, "h": 3600, "m": 60, "s": 1}

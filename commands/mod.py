@@ -1,7 +1,7 @@
 import inspect
 import sys
 
-from helpers.misc_functions import author_is_admin, is_number
+from helpers.misc_functions import author_is_admin, is_integer
 
 from commands.base import Command
 
@@ -23,7 +23,7 @@ class ModCommand(Command):
             if len(command) == 2:
                 guild_id = str(message.guild.id)
                 if command[0] == "add":
-                    if is_number(command[1]):
+                    if is_integer(command[1]):
                         role_id = int(command[1])
                         mod_role = message.guild.get_role(role_id)
                         # If the mod role exists
@@ -48,7 +48,7 @@ class ModCommand(Command):
                     else:
                         await message.channel.send(self.not_a_valid_role)
                 elif command[0] == "remove":
-                    if is_number(command[1]):
+                    if is_integer(command[1]):
                         role_id = int(command[1])
                         # Get the mod role from the guild and assign the name as the role ID if it doesn't exist.
                         mod_role = message.guild.get_role(role_id)
