@@ -85,7 +85,8 @@ class EventRegistry:
                     clazz.register_self()
                     event_name = clazz.event
                     if event_name is not None:
-                        setattr(self.instance, event_name, asyncio.coroutine(functools.partial(self.instance.event_template, event_name=event_name)))
+                        if not hasattr(self.instance, event_name):
+                            setattr(self.instance, event_name, asyncio.coroutine(functools.partial(self.instance.event_template, event_name=event_name)))
                     else:
                         print("Event handler has no event name configured! This is an error and the event will not fire!")
                         clazz.unregister_self()
