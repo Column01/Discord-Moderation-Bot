@@ -9,11 +9,7 @@ def is_number(string):
     Returns:
         Boolean: Whether the string could be converted to a number or not
     """
-    try:
-        int(string)
-        return True
-    except ValueError:
-        return False
+    return string.isnumeric()
 
 
 def is_valid_duration(duration):
