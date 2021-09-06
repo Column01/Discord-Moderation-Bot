@@ -2,7 +2,7 @@
 
 A modular bot for moderating users on discord! Add custom commands and event handlers to customize the bot to your liking. Reload the bot using the builtin `!reload` or `!reload events` command to see your changes applied LIVE!
 
-Want me to customize it for you? [You can pay me on Fiverr](https://www.fiverr.com/share/7GjQVL) to add custom features to the bot!
+Want me to customize it for you? [You can pay me on Fiverr](https://www.fiverr.com/share/277VG8) to add custom features to the bot!
 
 [Adding your own commands](DEVELOPING.md#custom-commands)
 
