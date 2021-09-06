@@ -4,15 +4,15 @@ A modular bot for moderating users on discord! Add custom commands and event han
 
 Want me to customize it for you? [You can pay me on Fiverr](https://www.fiverr.com/share/7GjQVL) to add custom features to the bot!
 
+[Adding your own commands](DEVELOPING.md#custom-commands)
+
+[Adding your own event handlers](DEVELOPING.md#custom-event-handlers)
+
 ## About discord.py
 
 As some of you may already know, discord.py has ceased development following some poor decision making on Discord's part regarding various bot features.
 
 Development of this bot will remain active, in the event discord.py no longer functions (or a proper replacement becomes the new standard), the bot *will* be updated. **Do not fret!** Your customized bot will always remain relevant :D
-
-[Adding your own commands](DEVELOPING.md#custom-commands)
-
-[Adding your own event handlers](DEVELOPING.md#custom-event-handlers)
 
 ## Requirements
 
