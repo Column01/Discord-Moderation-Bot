@@ -12,7 +12,7 @@ Want me to customize it for you? [You can pay me on Fiverr](https://www.fiverr.c
 
 As some of you may already know, discord.py has ceased development following some poor decision making on Discord's part regarding various bot features.
 
-Development of this bot will remain active, in the event discord.py no longer functions (or a proper replacement becomes the new standard), the bot *will* be updated. **Do not fret!** Your customized bot will always remain relevant :D
+Development of this bot will remain active, and the bot library used has been replaced with `py-cord`, which is a fork of `discord.py`. I tested it and it functions as normal.
 
 ## Requirements
 
