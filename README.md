@@ -17,9 +17,9 @@ Development of this bot will remain active, in the event discord.py no longer fu
 ## Requirements
 
 - [**Python**](https://www.python.org/downloads/) *version 3.6+ but just get the latest...*
-- [**discord.py**](https://pypi.org/project/discord.py/) *tested on version 1.7.3*
+- [**py-cord**](https://pypi.org/project/py-cord/) *a fork of discord.py, tested on version 1.7.3*
 
-Install python and run: `pip install discord.py`
+Install python and run: `pip install py-cord`
 
 ## Running the bot
 
