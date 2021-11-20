@@ -37,7 +37,7 @@ class UnMuteCommand(Command):
                         # Remove the muted role from the user and remove them from the guilds muted users list
                         await user.remove_roles(muted_role, reason=f"Unmuted by {message.author.name}")
                         self.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))
-                        await self.storage.write_settings_file_to_disk()
+                        await self.storage.write_file_to_disk()
                         # Message the channel
                         await message.channel.send(f"**Unmuted user:** `{user.name}`**.**")
                         
@@ -96,7 +96,7 @@ class MuteCommand(Command):
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["duration"] = -1
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["reason"] = reason
                         self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["normal_duration"] = -1
-                        await self.storage.write_settings_file_to_disk()
+                        await self.storage.write_file_to_disk()
                         # Message the channel
                         await message.channel.send(f"**Permanently muted user:** `{user.name}`**. Reason:** `{reason}`")
                         
@@ -161,7 +161,7 @@ class TempMuteCommand(Command):
                             self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["duration"] = mute_duration
                             self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["reason"] = reason
                             self.storage.settings["guilds"][guild_id]["muted_users"][str(user_id)]["normal_duration"] = command[1]
-                            await self.storage.write_settings_file_to_disk()
+                            await self.storage.write_file_to_disk()
                             # Message the channel
                             await message.channel.send(f"**Temporarily muted user:** `{user.name}` **for:** `{command[1]}`**. Reason:** `{reason}`")
                             

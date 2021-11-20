@@ -49,7 +49,7 @@ class MemberJoinEvent(EventHandler):
         
         for user_id in mutes_to_remove:
             self.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))
-        await self.storage.write_settings_file_to_disk()
+        await self.storage.write_file_to_disk()
 
 
 class MemberBanEvent(EventHandler):

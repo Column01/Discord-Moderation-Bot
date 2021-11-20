@@ -35,7 +35,7 @@ class UnBanCommand(Command):
                         # Unban the user and remove them from the guilds banned users list
                         await message.guild.unban(user, reason=f"Unbanned by {message.author.name}")
                         self.storage.settings["guilds"][guild_id]["banned_users"].pop(str(user_id))
-                        await self.storage.write_settings_file_to_disk()
+                        await self.storage.write_file_to_disk()
                         # Message the channel
                         await message.channel.send(f"**Unbanned user:** `{user.name}`**.**")
                         
@@ -93,7 +93,7 @@ class TempBanCommand(Command):
                             self.storage.settings["guilds"][guild_id]["banned_users"][str(user_id)]["duration"] = ban_duration
                             self.storage.settings["guilds"][guild_id]["banned_users"][str(user_id)]["reason"] = reason
                             self.storage.settings["guilds"][guild_id]["banned_users"][str(user_id)]["normal_duration"] = command[1]
-                            await self.storage.write_settings_file_to_disk()
+                            await self.storage.write_file_to_disk()
                             # Message the channel
                             await message.channel.send(f"**Temporarily banned user:** `{user.name}` **for:** `{command[1]}`**. Reason:** `{reason}`")
                             

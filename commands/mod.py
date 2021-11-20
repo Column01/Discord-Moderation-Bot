@@ -33,12 +33,12 @@ class ModCommand(Command):
                             # Create the section of mod roles if one doesn't exist
                             if mod_roles is None:
                                 self.storage.settings["guilds"][guild_id]["mod_roles"] = []
-                                await self.storage.write_settings_file_to_disk()
+                                await self.storage.write_file_to_disk()
                                 mod_roles = self.storage.settings["guilds"][guild_id].get("mod_roles")
                             if role_id not in mod_roles:
                                 # Add the mod role to the settings storage
                                 mod_roles.append(role_id)
-                                await self.storage.write_settings_file_to_disk()
+                                await self.storage.write_file_to_disk()
                                 await message.channel.send(f"**Added** `{mod_role.name}` **as a moderator role.** ")
                             else:
                                 # That role is already a mod
@@ -61,12 +61,12 @@ class ModCommand(Command):
                         # Create the section if it doesn't exist
                         if mod_roles is None:
                             self.storage.settings["guilds"][guild_id]["mod_roles"] = []
-                            await self.storage.write_settings_file_to_disk()
+                            await self.storage.write_file_to_disk()
                             mod_roles = self.storage.settings["guilds"][guild_id].get("mod_roles")
                         # If the role is in the mods list, remove it.
                         if role_id in mod_roles:
                             mod_roles.remove(role_id)
-                            await self.storage.write_settings_file_to_disk()
+                            await self.storage.write_file_to_disk()
                             await message.channel.send(f"**Removed** `{role_name}` **from the moderator roles.**")
                         else:
                             # The role was not listed as a mod.
@@ -95,7 +95,7 @@ class ModCommand(Command):
         # Create the section if it doesn't exist
         if mod_roles is None:
             self.storage.settings["guilds"][guild_id]["mod_roles"] = []
-            await self.storage.write_settings_file_to_disk()
+            await self.storage.write_file_to_disk()
             mod_roles = self.storage.settings["guilds"][guild_id].get("mod_roles")
         # If there is at least one mod role, send them to the channel.
         if len(mod_roles) >= 1:

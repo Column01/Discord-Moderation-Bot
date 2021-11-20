@@ -15,6 +15,9 @@ class ReadyEvent(EventHandler):
         print(f"Logged in as {self.client.user}")
         # Start the storage management and setup the guilds we are connected to.
         await self.client.storage.init()
+        # If you added a custom storage, it would get initialized here by un-commenting this
+        # await self.client.config.init()
+
         for guild in self.client.guilds:
             await self.client.setup_guild(guild)
         # Register some tasks

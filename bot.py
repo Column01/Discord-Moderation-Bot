@@ -13,6 +13,10 @@ class ModerationBot(discord.Client):
         self.prefix = "!"
         self.prefix_length = len(self.prefix)
         self.storage = StorageManagement()
+        
+        # Example of adding a custom config file, see below imported class
+        # from storage_management import ConfigManagement
+        # self.config = ConfigManagement()
 
         # Initialize the command registry
         from command_registry import registry
@@ -64,7 +68,7 @@ class ModerationBot(discord.Client):
     async def on_guild_remove(self, guild):
         print(f"Removing guild from guild storage since they removed the bot. Guild name: {guild.name}")
         self.storage.settings.pop(guild.id)
-        await self.storage.write_settings_file_to_disk()
+        await self.storage.write_file_to_disk()
         
     async def on_guild_channel_create(self, channel):
         guild = channel.guild
@@ -98,7 +102,7 @@ class ModerationBot(discord.Client):
             # The role doesn't exist so we create it
             muted_role = await guild.create_role(name="muted")
             self.storage.settings["guilds"][guild_id]["muted_role_id"] = muted_role.id
-            await self.storage.write_settings_file_to_disk()
+            await self.storage.write_file_to_disk()
         else:
             return
         
@@ -130,7 +134,7 @@ class ModerationBot(discord.Client):
             log_channel = await guild.create_text_channel(name="moderation", overwrites=overwrites)
             await log_channel.send("I created this channel for moderation logs. Please edit the channel permissions to allow what users you want to see this channel.")
             self.storage.settings["guilds"][guild_id]["log_channel_id"] = log_channel.id
-            await self.storage.write_settings_file_to_disk()
+            await self.storage.write_file_to_disk()
         else:
             return
 

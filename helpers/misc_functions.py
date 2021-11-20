@@ -111,6 +111,6 @@ async def author_is_mod(author, storage):
     mod_roles = storage.settings["guilds"][guild_id].get("mod_roles")
     if mod_roles is None:
         storage.settings["guilds"][guild_id]["mod_roles"] = []
-        await storage.write_settings_file_to_disk()
+        await storage.write_file_to_disk()
         mod_roles = storage.settings["guilds"][guild_id].get("mod_roles")
     return set(mod_roles) & set(author.roles)

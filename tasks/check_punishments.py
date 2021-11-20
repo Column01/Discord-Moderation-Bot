@@ -40,7 +40,7 @@ async def check_punishments(client):
             # (This is done aftewards since if we do it in the loop, python complains the dict size changed)
             for user_id in mutes_to_remove:
                 client.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))
-            await client.storage.write_settings_file_to_disk()
+            await client.storage.write_file_to_disk()
             
             # Not added yet so I left it blank for now
             banned_users = client.storage.settings["guilds"][guild_id]["banned_users"]
@@ -69,7 +69,7 @@ async def check_punishments(client):
             # (This is done aftewards since if we do it in the loop, python complains the dict size changed)
             for user_id in bans_to_remove:
                 client.storage.settings["guilds"][guild_id]["banned_users"].pop(str(user_id))
-            await client.storage.write_settings_file_to_disk()
+            await client.storage.write_file_to_disk()
 
         # Run every 5 seconds
         await asyncio.sleep(5)
