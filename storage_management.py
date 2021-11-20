@@ -97,10 +97,10 @@ class ConfigManagement(JsonFileManager):
 
     async def get_value(self, some_key):
         """ Example function loading a key from the config file """
-        self.load()
+        await self.load()
         return self.settings.get(some_key)
 
     async def set_value(self, some_key, some_value):
         """ Example function setting a value to the config file and saving it to disk """
         self.settings[some_key] = some_value
-        self.write_file_to_disk()
+        await self.write_file_to_disk()
