@@ -8,6 +8,8 @@ Want me to customize it for you? [You can pay me on Fiverr](https://www.fiverr.c
 
 [Adding your own event handlers](DEVELOPING.md#custom-event-handlers)
 
+[Adding your own storage file](DEVELOPING.md#custom-storage-file)
+
 ## About discord.py
 
 As some of you may already know, discord.py has ceased development following some poor decision making on Discord's part regarding various bot features.

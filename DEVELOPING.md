@@ -104,3 +104,86 @@ class OnMessageEvent(EventHandler):
 classes = inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__)
 
 ```
+
+## Custom Storage File
+
+The bot has provisions for custom storage files. This allows you to store customized values in a separate file from the main one so that you don't accidentally mess stuff up.
+
+### Initializing a custom config
+
+In order to use a custom storage file, you must add a reference to it in the main bot script. To do so, edit `bot.py` and go to the main `__init__` function.
+
+In that function, you may see a commented out section that looks like the following:
+
+```python
+# from storage_management import ConfigManagement
+# self.config = ConfigManagement()
+```
+
+Un-commenting this will load a generic `ConfigManagement` class I've added as an example. You can edit this class inside `storage_management.py`.
+
+Once you uncomment that, you will also need to run it's `init` function, currently there is a call to do this in the `events/ready.py` event handler once the class is enabled in the main bot script. If you want, you can create your own custom config class in that same file, but you will need to import it and initialize it as needed following the same method used with the example here (import it, add a class variable to `bot.py` and call the `init` function inside the ready event)
+
+### Referencing values from your custom config
+
+In order to get data from your custom config elsewhere, you need to obtain it's reference from the client instance. Following the command and event templates from above, you would do so like this:
+
+```python
+# Get config management class reference (only works if you have a reference to the client instance stored in "self.client_instance")
+config = self.client_instance.config
+
+# Get some value from config (loads contents from disk)
+config_value = await config.get_value("some_key")
+if config_value is not None:
+    print(config_value)
+else:
+    print("Value not found in config file!")
+
+# If you want to get values but do it in a way where it doesn't overwrite changes in the stored class values
+# Use the "load_local" function to get a local reference
+
+local_settings = await config.load_local()
+
+# Sets and saves some value to disk
+await config.set_value("some_key", "some_value")
+
+# you should set values explicitly using the "settings" class variable of your custom config if you want to set more than one value
+config.settings["some_key"] = "some_value"
+# It can store list and sub objects too. Follow typical JSON structure!
+config.settings["some_key2"] = ["some_value1", "some_value2"]
+# Saves the settings after all your changes
+await config.write_file_to_disk()
+
+```
+
+### Custom Config Template
+
+Here is a template of the config handler class used in this example, you can rename it and add the required code (covered above) to initialize it.
+
+**Make sure to substitute the new name of the class!**
+
+```python
+class ConfigManagement(JsonFileManager):
+    """ Example custom config class to handle non guild-specific settings for customized features of the bot """
+    def __init__(self):
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        self.file_path = os.path.join(__location__, "custom_config.json")
+        self.settings = None
+
+    async def create_file(self):
+        self.settings = {
+            "some_key": "some_value"
+        }
+        await self.write_file_to_disk()
+
+    async def get_value(self, some_key):
+        """ Example function loading a key from the config file """
+        await self.load()
+        return self.settings.get(some_key)
+
+    async def set_value(self, some_key, some_value):
+        """ Example function setting a value to the config file and saving it to disk """
+        self.settings[some_key] = some_value
+        await self.write_file_to_disk()
+
+```
