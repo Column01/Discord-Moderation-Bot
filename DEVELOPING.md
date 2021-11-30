@@ -27,7 +27,9 @@ Obtain each using `my_var = kwargs.get("key")` where `key` is an option from bel
 
 ### Command template
 
-All you should need to edit is `self.cmd` variable to be the start of the command (`!test` would be `self.cmd = test`) as well as the code inside the `execute` function. In the execute function there are some examples of additional information you can get from the `kwargs` or `Key word arguments` that the bot fills.
+All you should need to edit is `self.cmd` variable to be the start of the command (`!test` would be `self.cmd = "test"`). You can also define command aliases by making `self.cmd` a list of strings like this: `self.cmd = ["test", "test2"]`.
+
+Once you have that you need to edit the code inside the `execute` function. In the template below there are some examples of additional information about commands as well as info on what you can get from the `kwargs` or `Key word arguments` that the bot fills. The `execute` function is run to execute your command, and is where you would reply to the user or do stuff with the command.
 
 ```py
 import inspect
@@ -43,6 +45,8 @@ class TemplateCommand(Command):
     def __init__(self, client_instance):
         # Change this variable to the command name you want the command to use. CaSe SeNsItIvE!
         self.cmd = "mycommandname"
+        # You can also define multiple command names or aliases like this:
+        self.cmd = ["mycommandname", "mcn"]
         # This is a reference to the main bot class. Allows for arbitrary access in case your command needs something specific that cannot be obtained from the kwargs. Really not recommended that you mess with this unless you know what you are doing!
         self.client = client_instance
 

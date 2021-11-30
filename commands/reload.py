@@ -5,7 +5,7 @@ from commands.base import Command
 
 class ReloadCommand(Command):
     def __init__(self, _):
-        self.cmd = "reload"
+        self.cmd = ["reload", "rl"]
 
     async def execute(self, message, **kwargs):
         args = kwargs.get("args")
