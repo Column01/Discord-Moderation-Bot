@@ -3,6 +3,7 @@ import os
 import sys
 
 from commands.base import Command
+from cool_utils import Terminal
 
 
 class CommandRegistry:
@@ -14,7 +15,7 @@ class CommandRegistry:
     module_changes = False
 
     def __init__(self):
-        print("Initializing the command registry handler. This does not start registering commands!")
+        Terminal.display("Initializing the command registry handler. This does not start registering commands!")
         self.get_py_files(overwrite=True)
     
     def set_instance(self, instance):
@@ -26,7 +27,7 @@ class CommandRegistry:
         if cmd not in self.commands:
             self.commands[cmd] = instance
         else:
-            print("Command Instance already present: " + cmd)
+            Terminal.warn("Command Instance already present: " + cmd)
 
     def unregister(self, cmd):
         """ Method to unregister a command module by name """
@@ -58,7 +59,7 @@ class CommandRegistry:
 
     def register_commands(self):
         """ Registers all commands with the bot """
-        print("Registering commands...")
+        Terminal.display("Registering commands...")
         # Clear commands storage
         self.commands.clear()
         # Unload all command modules
@@ -81,7 +82,7 @@ class CommandRegistry:
                     clazz.register_self()
                     del clazz
                 else:
-                    print("Command class in file: {} is not a subclass of the base command class. Please fix this (see repository for details)!".format(fname))
+                    Terminal.warn("Command class in file: {} is not a subclass of the base command class. Please fix this (see repository for details)!".format(fname))
 
     async def reload_commands(self):
         """ Gets the changed python files list and reloads the commands if there are changes """

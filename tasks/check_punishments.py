@@ -2,6 +2,7 @@ import asyncio
 import time
 
 from helpers.embed_builder import EmbedBuilder
+from cool_utils import Terminal
 
 
 async def check_punishments(client):
@@ -53,7 +54,7 @@ async def check_punishments(client):
                     # Ban is expired. Unban the user and remove it from the guild's storage
                     user = await client.fetch_user(user_id)
                     if user is None:
-                        print(f"No user with id {user_id}")
+                        Terminal.warn(f"No user with id {user_id}")
                         continue
                     await guild.unban(user, reason="Temp ban expired")
                     bans_to_remove.append(user_id)

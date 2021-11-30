@@ -5,6 +5,7 @@ import functools
 import asyncio
 
 from events.base import EventHandler
+from cool_utils import Terminal
 
 
 class EventRegistry:
@@ -16,7 +17,7 @@ class EventRegistry:
         self.new_py_files = []
         self.modules = []
         self.module_changes = False
-        print("Initializing the event registry handler. This does not start registering events!")
+        Terminal.display("Initializing the event registry handler. This does not start registering events!")
         self.get_py_files(overwrite=True)
     
     def set_instance(self, instance):
@@ -30,7 +31,7 @@ class EventRegistry:
         if instance not in self.event_handlers[event]:
             self.event_handlers[event].append(instance)
         else:
-            print("Event Instance already present: " + instance)
+            Terminal.warn("Event Instance already present: " + instance)
 
     def unregister(self, event, instance):
         """ Method to unregister an event module by name """
@@ -62,7 +63,7 @@ class EventRegistry:
 
     def register_events(self):
         """ Registers all events with the bot """
-        print("Registering events...")
+        Terminal.display("Registering events...")
         # Clear events storage
         self.event_handlers.clear()
         # Unload all event modules
@@ -88,11 +89,11 @@ class EventRegistry:
                         if not hasattr(self.instance, event_name):
                             setattr(self.instance, event_name, asyncio.coroutine(functools.partial(self.instance.event_template, event_name=event_name)))
                     else:
-                        print("Event handler has no event name configured! This is an error and the event will not fire!")
+                        Terminal.error("Event handler has no event name configured! This is an error and the event will not fire!")
                         clazz.unregister_self()
                     del clazz
                 else:
-                    print("Event handler class in file: {} is not a subclass of the base event handler class. Please fix this (see repository for details)!".format(fname))
+                    Terminal.error("Event handler class in file: {} is not a subclass of the base event handler class. Please fix this (see repository for details)!".format(fname))
 
     async def reload_events(self):
         """ Gets the changed python files list and reloads the events if there are changes """
@@ -109,7 +110,7 @@ class EventRegistry:
         try:
             return self.event_handlers[event]
         except KeyError:
-            print("No event handlers registered for event.")
+            Terminal.error("No event handlers registered for event.")
 
 
 event_registry = EventRegistry()

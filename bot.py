@@ -2,6 +2,8 @@ import os
 
 import discord
 
+from cool_utils import Terminal
+
 from storage_management import StorageManagement
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -23,14 +25,14 @@ class ModerationBot(discord.Client):
         self.registry = registry
         self.registry.set_instance(self)
         self.registry.register_commands()
-        print("The bot has been initialized with the following commands: " + ", ".join(self.registry.get_command_names()))
+        Terminal.display("The bot has been initialized with the following commands: " + ", ".join(self.registry.get_command_names()))
 
         # Initialize event registry
         from event_registry import event_registry
         self.event_registry = event_registry
         self.event_registry.set_instance(self)
         self.event_registry.register_events()
-        print("The bot has been initialized with the following events: " + ", ".join(self.event_registry.get_all_event_handlers()))
+        Terminal.display("The bot has been initialized with the following events: " + ", ".join(self.event_registry.get_all_event_handlers()))
 
         # Permissions for the muted role and for the default role
         self.muted_permissions = discord.PermissionOverwrite(
@@ -62,11 +64,11 @@ class ModerationBot(discord.Client):
     """ DISCORD CLIENT EVENTS START HERE (DEPRECATED, USE EVENT HANDLERS!) """
                 
     async def on_guild_join(self, guild):
-        print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
+        Terminal.display(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
         await self.setup_guild(guild)
     
     async def on_guild_remove(self, guild):
-        print(f"Removing guild from guild storage since they removed the bot. Guild name: {guild.name}")
+        Terminal.display(f"Removing guild from guild storage since they removed the bot. Guild name: {guild.name}")
         self.storage.settings.pop(guild.id)
         await self.storage.write_file_to_disk()
         
@@ -145,10 +147,10 @@ if __name__ == "__main__":
     try:
         token = open(os.path.join(__location__, "token.txt"), "r").read().strip("\n")
     except FileNotFoundError:
-        print("Please create a token.txt file and place your token in it!")
+        Terminal.warn("Please create a token.txt file and place your token in it!")
         quit()
     if token is None:
-        print("Please create a token.txt file and place your token in it!")
+        Terminal.warn("Please create a token.txt file and place your token in it!")
         quit()
     # Run the bot instance
     bot = ModerationBot()
