@@ -54,7 +54,7 @@ class StorageManagement(JsonFileManager):
         self.settings = None
 
     async def create_file(self):
-        with open(self.settings_file_path, "w+") as w:
+        with open(self.file_path, "w+") as w:
             self.settings = w.read()
             w.close()
             self.settings = {
