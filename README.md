@@ -10,16 +10,14 @@ A modular bot for moderating users on discord! Add custom commands and event han
 
 ## About discord.py
 
-As some of you may already know, discord.py has ceased development following some poor decision making on Discord's part regarding various bot features.
-
-Development of this bot will remain active, and the bot library used has been replaced with `py-cord`, which is a fork of `discord.py`. I tested it and it functions as normal.
+It's back! You can safely install version 1.7.3 from PyPi and it will work for the foreseeable future. I will be updating the code to use the v2.0 code as soon as it's in a stable release.
 
 ## Requirements
 
-- [**Python**](https://www.python.org/downloads/) *version 3.6+ but just get the latest...*
-- [**py-cord**](https://pypi.org/project/py-cord/) *a fork of discord.py, tested on version 1.7.3*
+- [**Python**](https://www.python.org/downloads/) *Version 3.6+ but just get the latest...*
+- [**discord.py**](https://pypi.org/project/discord.py/) *Version 1.7.3*
 
-Install python and run: `pip install py-cord`
+Install python and run: `pip install discord.py`
 
 ## Running the bot
 
