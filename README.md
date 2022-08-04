@@ -8,23 +8,21 @@ A modular bot for moderating users on discord! Add custom commands and event han
 
 [Adding your own storage file](DEVELOPING.md#custom-storage-file)
 
-## About discord.py
+# Installation/Setup
 
-It's back! You can safely install version 1.7.3 from PyPi and it will work for the foreseeable future. I will be updating the code to use the v2.0 code as soon as it's in a stable release.
-
-## Requirements
+## Installing Requirements
 
 - [**Python**](https://www.python.org/downloads/) *Version 3.6+ but just get the latest...*
 - [**discord.py**](https://pypi.org/project/discord.py/) *Version 1.7.3*
-
-Install python and run: `pip install discord.py`
+    - Windows install: `python -m pip install discord.py` 
+    - Linux install: `pip3 install discord.py`
 
 ## Running the bot
 
 1. Place a text file named ``token.txt`` in the root directory (with `bot.py`) and place your auth token in it
 2. Open a command prompt and use ``python bot.py`` to run the bot.
 
-## Command Info
+# Bot Information
 
 - Default prefix: `!`
 - `<argument>` = **Required argument**
