@@ -145,11 +145,9 @@ if __name__ == "__main__":
     try:
         token = open(os.path.join(__location__, "token.txt"), "r").read().strip("\n")
     except FileNotFoundError:
-        print("Please create a token.txt file and place your token in it!")
-        quit()
+        quit("Please create a token.txt file and place your token in it!")
     if token is None:
-        print("Please create a token.txt file and place your token in it!")
-        quit()
+        quit("Please create a token.txt file and place your token in it!")
     intents = discord.Intents.default()
     intents.members = True
     intents.message_content = True
