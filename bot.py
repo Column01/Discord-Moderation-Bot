@@ -8,7 +8,7 @@ __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file
 
 
 class ModerationBot(discord.Client):
-    def __init__(self):
+    def __init__(self, intents):
         # Change to whatever prefix you want
         self.prefix = "!"
         self.prefix_length = len(self.prefix)
@@ -45,7 +45,7 @@ class ModerationBot(discord.Client):
             send_messages=False
         )
         # Start the discord client
-        discord.Client.__init__(self)
+        discord.Client.__init__(self, intents=intents)
     
     async def event_template(self, *args, **kwargs):
         """ The template event function used to replicate event functions dynamically.
@@ -150,6 +150,9 @@ if __name__ == "__main__":
     if token is None:
         print("Please create a token.txt file and place your token in it!")
         quit()
+    intents = discord.Intents.default()
+    intents.members = True
+    intents.message_content = True
     # Run the bot instance
-    bot = ModerationBot()
+    bot = ModerationBot(intents)
     bot.run(token)

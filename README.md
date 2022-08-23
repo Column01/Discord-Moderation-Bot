@@ -8,21 +8,21 @@ A modular bot for moderating users on discord! Add custom commands and event han
 
 [Adding your own storage file](DEVELOPING.md#custom-storage-file)
 
-# Installation/Setup
+## Installation/Setup
 
-## Installing Requirements
+### Installing Requirements
 
-- [**Python**](https://www.python.org/downloads/) *Version 3.6+ but just get the latest...*
-- [**discord.py**](https://pypi.org/project/discord.py/) *Version 1.7.3*
-    - Windows install: `python -m pip install discord.py==1.7.3` 
-    - Linux install: `pip3 install discord.py==1.7.3`
+- [**Python**](https://www.python.org/downloads/) *Version 3.8+ but just get the latest...*
+- [**discord.py**](https://pypi.org/project/discord.py/) *Version 2.0.0*
+  - Windows install: `python -m pip install discord.py`
+  - Linux install: `pip3 install discord.py`
 
-## Running the bot
+### Running the bot
 
 1. Place a text file named ``token.txt`` in the root directory (with `bot.py`) and place your auth token in it
 2. Open a command prompt and use ``python bot.py`` to run the bot.
 
-# Bot Information
+## Bot Information
 
 - Default prefix: `!`
 - `<argument>` = **Required argument**
@@ -32,7 +32,7 @@ A modular bot for moderating users on discord! Add custom commands and event han
 - All commands require you to be in a moderator role. See the commands below on how to add or remove a mod role (requires admin permission to add mod roles)
 - Read how to get the User ID [here](#how-to-get-user-id)
 
-## Commands
+### Commands
 
 - `!mod <add|remove|list> <role ID>`
   - Adds, removes the role ID to the list of moderator roles.
@@ -60,7 +60,7 @@ A modular bot for moderating users on discord! Add custom commands and event han
 - `!reload events`
   - Reloads the event registry for any changes that were made
 
-## How to get user ID
+### How to get user ID
 
 You should follow the discord guide [here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-)
 
@@ -70,7 +70,7 @@ You should follow the discord guide [here](https://support.discordapp.com/hc/en-
 - Right click their username in chat or on the sidebar
 - Click `Copy ID`
 
-## Issues with custom commands?
+### Issues with custom commands?
 
 Ensure that:
 
