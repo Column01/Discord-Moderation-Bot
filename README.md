@@ -14,8 +14,8 @@ A modular bot for moderating users on discord! Add custom commands and event han
 
 - [**Python**](https://www.python.org/downloads/) *Version 3.6+ but just get the latest...*
 - [**discord.py**](https://pypi.org/project/discord.py/) *Version 1.7.3*
-    - Windows install: `python -m pip install discord.py` 
-    - Linux install: `pip3 install discord.py`
+    - Windows install: `python -m pip install discord.py==1.7.3` 
+    - Linux install: `pip3 install discord.py==1.7.3`
 
 ## Running the bot
 
