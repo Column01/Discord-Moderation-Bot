@@ -17,10 +17,26 @@ A modular bot for moderating users on discord! Add custom commands and event han
   - Windows install: `python -m pip install discord.py`
   - Linux install: `pip3 install discord.py`
 
+### Creating a bot account with Discord
+
+1. Go to the [discord developer portal](https://discord.com/developers/applications) and create a new application
+2. Navigate to the `Bot` section and click `Add a bot`. Fill in the necessary info (like name and an image if you like)
+3. Scroll down to the `Privileged Gateway Intents` section and make sure to select the `SERVER MEMBERS INTENT` and `MESSAGE CONTENT INTENT`. **Click save so it saves your changes!**
+4. Now scroll back up and click the `Reset Token` button, follow the screen prompts until you can copy that token. This is how the program will log in as this bot account. **DO NOT SHARE THIS TOKEN WITH ANYONE!**
+5. Paste the newly copied token into a text file called `token.txt` in the same folder as the `bot.py` file.
+
+### Inviting the bot to your server
+
+1. On the application page for your bot in the [discord developer portal](https://discord.com/developers/applications), click the `OAuth2` section.
+2. Now click the `URL Generator` section on the sidebar
+3. Select the `bot` scope and then select the `Administrator` permission in the newly displayed Bot Permissions checkbox list
+4. Copy the URL from the bottom and paste it into your browser. Follow the onscreen prompts to invite the bot to your server. You must be an administrator to invite the bot to the server.
+
 ### Running the bot
 
-1. Place a text file named ``token.txt`` in the root directory (with `bot.py`) and place your auth token in it
-2. Open a command prompt and use ``python bot.py`` to run the bot.
+1. Open a command prompt in the root directory of the bot files (where `bot.py` is) and run the command `python bot.py` to run the bot.
+2. You should see some output on the screen talking about loading commands and logging in as the bot. If that all works, now you can use the bot!
+3. Add any moderator roles you want to the bot using the commands below!
 
 ## Bot Information
 
