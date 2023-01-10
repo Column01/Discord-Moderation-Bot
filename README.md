@@ -13,7 +13,7 @@ A modular bot for moderating users on Discord! Add custom commands and event han
 ### Installation Requirements
 
 - [**Python**](https://www.python.org/downloads/) *Version 3.8+ but just get the latest...*
-- [**discord.py**](https://pypi.org/project/discord.py/) *Version 2.0.0*
+- [**discord.py**](https://pypi.org/project/discord.py/) *Version 2.0.0+*
   - Windows install: `python -m pip install discord.py`
   - Linux install: `pip3 install discord.py`
 
