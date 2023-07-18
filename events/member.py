@@ -1,10 +1,8 @@
-import inspect
 import sys
 import time
 
 import discord
 from helpers.embed_builder import EmbedBuilder
-
 from events.base import EventHandler
 
 
@@ -26,17 +24,20 @@ class MemberJoinEvent(EventHandler):
         log_channel = guild.get_channel(log_channel_id)
         muted_users = self.storage.settings["guilds"][guild_id]["muted_users"]
         mutes_to_remove = []
+        
         # Loop over the muted users
         for user_info in muted_users.items():
             user_id = int(user_info[0])
             duration = int(user_info[1]["duration"])
             normal_duration = user_info[1]["normal_duration"]
             user = await guild.fetch_member(user_id)
+            
             # if the user_id for this user_info matches the member who joined the guild
             if user_id == member.id:
                 if -1 < duration < int(time.time()):
                     # Mute is expired. Remove it from the guild's storage
                     mutes_to_remove.append(user_id)
+                    
                     # Build a mute expire embed and message it to the log channel
                     embed_builder = EmbedBuilder(event="muteexpire")
                     await embed_builder.add_field(name="**Unmuted user**", value=f"`{user.name}`")
@@ -76,7 +77,7 @@ class MemberBanEvent(EventHandler):
                         
         # Get recent ban actions
         async for entry in guild.audit_logs(action=discord.AuditLogAction.ban, limit=5):
-            # If the entry was made by the bot or it's entry ID has already been logged, skip it
+            # If the entry was made by the bot or its entry ID has already been logged, skip it
             if entry.user == self.client.user or entry.id in logged_actions:
                 continue
             else:
@@ -114,7 +115,7 @@ class MemberKickEvent(EventHandler):
 
         # Get recent kick actions
         async for entry in guild.audit_logs(action=discord.AuditLogAction.kick, limit=5):
-            # If the entry was made by the bot or it's entry ID has already been logged, skip it.
+            # If the entry was made by the bot or its entry ID has already been logged, skip it.
             if entry.user == self.client.user or entry.id in logged_actions:
                 continue
             else:
