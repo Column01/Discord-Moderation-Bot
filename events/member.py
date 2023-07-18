@@ -1,6 +1,6 @@
 import sys
 import time
-
+import inspect
 import discord
 from helpers.embed_builder import EmbedBuilder
 from events.base import EventHandler
