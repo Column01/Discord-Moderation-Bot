@@ -2,11 +2,20 @@
 
 A modular bot for moderating users on discord! Add custom commands and event handlers to customize the bot to your liking. Reload the bot using the builtin `!reload` or `!reload events` command to see your changes applied LIVE!
 
+## A Note Regarding Message Intents
+This bot will only work on servers that are smaller as it requires the use of message intents, which for larger bots, requires verification from discord. 
+This means if your bot will be in more than 100 severs you will not be able to use this method of doing commands and will need to code your own command handlers using the new interactions.
+
+See [this FAQ](https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-FAQ) from discord regarding these changes.
+
+There is a vague plan to update to use the new interaction based commands which offers a nicer user experience, but for now it will remain message based until I really get bored and need something to do
+
+## Quick Links
 [Adding your own commands](DEVELOPING.md#custom-commands)
 
 [Adding your own event handlers](DEVELOPING.md#custom-event-handlers)
 
-[Adding your own storage file](DEVELOPING.md#custom-storage-file)
+[Adding your own persistent storage](DEVELOPING.md#custom-storage-file)
 
 ## Installation/Setup
 
