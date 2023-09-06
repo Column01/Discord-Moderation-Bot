@@ -21,7 +21,7 @@ There is a vague plan to update to use the new interaction based commands which 
 
 ### Installing Requirements
 
-- [**Python**](https://www.python.org/downloads/) *Version 3.8+ but just get the latest...*
+- [**Python**](https://www.python.org/downloads/) *Version >=3.8, <3.10*
 - [**discord.py**](https://pypi.org/project/discord.py/) *Version 2.0.0*
   - Windows install: `python -m pip install discord.py`
   - Linux install: `pip3 install discord.py`
