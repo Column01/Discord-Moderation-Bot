@@ -86,11 +86,8 @@ class EventRegistry:
                     event_name = clazz.event
                     if event_name is not None:
                         if not hasattr(self.instance, event_name):
-                            # Check if the python version is older than 3.11 and if it is use `asyncio.coroutine`, else use the partial function directly
-                            if sys.version_info < (3, 11):
-                                setattr(self.instance, event_name, asyncio.coroutine(functools.partial(self.instance.event_template, event_name=event_name)))
-                            else:
-                                setattr(self.instance, event_name, functools.partial(self.instance.event_template, event_name=event_name))
+                            # Removed the asyncio.coroutine part... suspicious and if this causes issues, beat Colin with a stick :D
+                            setattr(self.instance, event_name, functools.partial(self.instance.event_template, event_name=event_name))
                     else:
                         print("Event handler has no event name configured! This is an error and the event will not fire!")
                         clazz.unregister_self()
