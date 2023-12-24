@@ -18,7 +18,7 @@ class EventRegistry:
         self.module_changes = False
         print("Initializing the event registry handler. This does not start registering events!")
         self.get_py_files(overwrite=True)
-    
+
     def set_instance(self, instance):
         """ Gives the event registry and instance of the bot """
         self.instance = instance
@@ -102,7 +102,7 @@ class EventRegistry:
             self.module_changes = False
             self.py_files = self.new_py_files
             self.register_events()
-        
+
     def get_all_event_handlers(self):
         return self.event_handlers.keys()
 

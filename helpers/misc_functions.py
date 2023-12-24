@@ -72,6 +72,8 @@ def parse_duration(s):
         for char in s:
             if char.isdigit():
                 tempnums.append(char)
+            elif char == " " or char is None:
+                continue
             else:
                 multiple = values.get(char, 1)
                 num = int("".join(tempnums))
