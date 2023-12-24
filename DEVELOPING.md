@@ -35,6 +35,9 @@ Once you have that you need to edit the code inside the `execute` function. In t
 import inspect
 import sys
 
+import discord
+
+from bot import ModerationBot
 from commands.base import Command
 """ DO NOT TOUCH ABOVE THIS LINE """
 # Custom modules are allowed to be imported
@@ -42,7 +45,7 @@ from my_module import MyClass
 
 
 class TemplateCommand(Command):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         # Change this variable to the command name you want the command to use. CaSe SeNsItIvE!
         self.cmd = "mycommandname"
         # You can also define multiple command names or aliases like this:
@@ -50,7 +53,7 @@ class TemplateCommand(Command):
         # This is a reference to the main bot class. Allows for arbitrary access in case your command needs something specific that cannot be obtained from the kwargs. Really not recommended that you mess with this unless you know what you are doing!
         self.client = client_instance
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         """ The code here that will run when the command is recieved """
         # The command that was run
         cmd = kwargs.get("command")
@@ -84,17 +87,18 @@ Again, you should only need to modify the event you want to listen to in `self.e
 import inspect
 import sys
 
+from bot import ModerationBot
 from events.base import EventHandler
 """ DO NOT TOUCH ABOVE THIS LINE """
 # Custom modules are allowed to be imported
 from my_module import MyClass
 
 class OnMessageEvent(EventHandler):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.event = "on_message"
     
-    async def handle(self, *args, **kwargs):
+    async def handle(self, *args, **kwargs) -> None:
         # Args is a list of all arguments sent by discord.py in the event. 
         # If you want to obtain info from the event, you must grab it by it's index. 
         # The event documentation from discord.py will show you what is passed with the event and it will be in that order from the list. 
@@ -169,23 +173,23 @@ Here is a template of the config handler class used in this example, you can ren
 ```python
 class ConfigManagement(JsonFileManager):
     """ Example custom config class to handle non guild-specific settings for customized features of the bot """
-    def __init__(self):
+    def __init__(self) -> None:
         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         self.file_path = os.path.join(__location__, "custom_config.json")
         self.settings = None
 
-    async def create_file(self):
+    async def create_file(self) -> None:
         self.settings = {
             "some_key": "some_value"
         }
         await self.write_file_to_disk()
 
-    async def get_value(self, some_key):
+    async def get_value(self, some_key: str) -> str:
         """ Example function loading a key from the config file """
         await self.load()
         return self.settings.get(some_key)
 
-    async def set_value(self, some_key, some_value):
+    async def set_value(self, some_key: str, some_value: str) -> None:
         """ Example function setting a value to the config file and saving it to disk """
         self.settings[some_key] = some_value
         await self.write_file_to_disk()

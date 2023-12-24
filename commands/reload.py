@@ -1,13 +1,17 @@
 import inspect
 import sys
+
+import discord
+
+from bot import ModerationBot
 from commands.base import Command
 
 
 class ReloadCommand(Command):
-    def __init__(self, _):
+    def __init__(self, _: ModerationBot) -> None:
         self.cmd = ["reload", "rl"]
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         args = kwargs.get("args")
         if args is not None and "events" in args:
             from event_registry import event_registry

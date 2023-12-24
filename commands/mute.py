@@ -3,15 +3,16 @@ import sys
 import time
 
 import discord
+
+from bot import ModerationBot
+from commands.base import Command
 from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import (author_is_mod, is_integer,
                                     is_valid_duration, parse_duration)
 
-from commands.base import Command
-
 
 class UnMuteCommand(Command):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.cmd = "unmute"
         self.client = client_instance
         self.storage = client_instance.storage
@@ -20,7 +21,7 @@ class UnMuteCommand(Command):
         self.not_enough_arguments = "You must provide a user to unmute. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         command = kwargs.get("args")
         if await author_is_mod(message.author, self.storage):
             if len(command) == 1:
@@ -61,7 +62,7 @@ class UnMuteCommand(Command):
 
 
 class MuteCommand(Command):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.cmd = "mute"
         self.client = client_instance
         self.storage = client_instance.storage
@@ -70,7 +71,7 @@ class MuteCommand(Command):
         self.not_enough_arguments = "You must provide a user to mute. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         command = kwargs.get("args")
         if await author_is_mod(message.author, self.storage):
             if len(command) >= 1:
@@ -122,7 +123,7 @@ class MuteCommand(Command):
     
     
 class TempMuteCommand(Command):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.cmd = "tempmute"
         self.client = client_instance
         self.storage = client_instance.storage
@@ -132,7 +133,7 @@ class TempMuteCommand(Command):
         self.not_enough_arguments = "You must provide a user to temp mute. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         command = kwargs.get("args")
         if await author_is_mod(message.author, self.storage):
             if len(command) >= 2:

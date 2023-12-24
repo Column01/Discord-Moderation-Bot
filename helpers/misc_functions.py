@@ -1,6 +1,9 @@
+from typing import Union
+from discord import Member
+from storage_management import StorageManagement
 
 
-def is_integer(string):
+def is_integer(string: str) -> bool:
     """Checks if the string is an integer
 
     Args:
@@ -20,7 +23,7 @@ def is_integer(string):
 is_number = is_integer
 
 
-def is_float(string):
+def is_float(string: str) -> bool:
     """Checks if the string is a float
 
     Args:
@@ -36,7 +39,7 @@ def is_float(string):
         return False
 
 
-def is_valid_duration(duration):
+def is_valid_duration(duration: Union[int, str]) -> bool:
     """Checks if the duration is a positive number
 
     Args:
@@ -54,7 +57,7 @@ def is_valid_duration(duration):
         return False
     
 
-def parse_duration(s):
+def parse_duration(string: str) -> int:
     """Parses a duration in seconds from a duration string
 
     Args:
@@ -85,7 +88,7 @@ def parse_duration(s):
             return -1
         
         
-def author_is_admin(author):
+def author_is_admin(author: Member) -> bool:
     """Checks if the author is an administrator
 
     Args:
@@ -97,7 +100,7 @@ def author_is_admin(author):
     return author.guild_permissions.administrator
 
 
-async def author_is_mod(author, storage):
+async def author_is_mod(author: Member, storage: StorageManagement) -> bool:
     """Checks if the author is a mod or administrator
 
     Args:

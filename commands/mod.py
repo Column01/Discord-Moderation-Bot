@@ -1,13 +1,15 @@
 import inspect
 import sys
 
-from helpers.misc_functions import author_is_admin, is_integer
+import discord
 
+from bot import ModerationBot
 from commands.base import Command
+from helpers.misc_functions import author_is_admin, is_integer
 
 
 class ModCommand(Command):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.cmd = "mod"
         self.client = client_instance
         self.storage = client_instance.storage
@@ -17,7 +19,7 @@ class ModCommand(Command):
         self.not_enough_arguments = "You must provide a role to make a moderator role."
         self.role_already_mod = "That role ID is already listed as a mod."
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         command = kwargs.get("args")
         if author_is_admin(message.author):
             if len(command) == 2:
@@ -88,7 +90,7 @@ class ModCommand(Command):
         else:
             await message.channel.send("**You must be an Administrator to use this command.**")
     
-    async def list_mods(self, message):
+    async def list_mods(self, message: discord.Message) -> None:
         # Get all mod roles from disk
         guild_id = str(message.guild.id)
         mod_roles = self.storage.settings["guilds"][guild_id].get("mod_roles")

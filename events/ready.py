@@ -4,14 +4,15 @@ import sys
 from tasks.check_punishments import check_punishments
 
 from events.base import EventHandler
+from bot import ModerationBot
 
 
 class ReadyEvent(EventHandler):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot):
         self.client = client_instance
         self.event = "on_ready"
     
-    async def handle(self, *args, **kwargs):
+    async def handle(self, *args, **kwargs) -> None:
         print(f"Logged in as {self.client.user}")
         # Start the storage management and setup the guilds we are connected to.
         await self.client.storage.init()

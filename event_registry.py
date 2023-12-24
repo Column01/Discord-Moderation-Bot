@@ -4,13 +4,16 @@ import sys
 import functools
 import asyncio
 
+from bot import ModerationBot
 from events.base import EventHandler
+
+from typing import Union, Optional, KeysView, TYPE_CHECKING
 
 
 class EventRegistry:
     """ Event registry class that handles dyanmic class loading and getting info for an event handler """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.event_handlers = {}
         self.py_files = []
         self.new_py_files = []
@@ -19,11 +22,11 @@ class EventRegistry:
         print("Initializing the event registry handler. This does not start registering events!")
         self.get_py_files(overwrite=True)
 
-    def set_instance(self, instance):
+    def set_instance(self, instance: ModerationBot) -> None:
         """ Gives the event registry and instance of the bot """
         self.instance = instance
 
-    def register(self, event, instance):
+    def register(self, event: str, instance: ModerationBot) -> None:
         """ Method that registers event modules """
         if event not in self.event_handlers:
             self.event_handlers[event] = []
@@ -32,7 +35,7 @@ class EventRegistry:
         else:
             print("Event Instance already present: " + instance)
 
-    def unregister(self, event, instance):
+    def unregister(self, event: str, instance: ModerationBot) -> None:
         """ Method to unregister an event module by name """
         try:
             self.event_handlers[event].remove(instance)
@@ -43,7 +46,7 @@ class EventRegistry:
         except KeyError:
             pass
 
-    def get_py_files(self, overwrite=False):
+    def get_py_files(self, overwrite: Optional[bool]=False) -> None:
         """Gets a list of python files in the events directory, used when reloading
         Args:
             overwrite (bool, optional): Whether to overwrite the py_files class variable. Used for when scripts are being loaded initially. Defaults to False.
@@ -60,7 +63,7 @@ class EventRegistry:
             if overwrite:
                 self.py_files = new_py_files
 
-    def register_events(self):
+    def register_events(self) -> None:
         """ Registers all events with the bot """
         print("Registering events...")
         # Clear events storage
@@ -95,7 +98,7 @@ class EventRegistry:
                 else:
                     print("Event handler class in file: {} is not a subclass of the base event handler class. Please fix this (see repository for details)!".format(fname))
 
-    async def reload_events(self):
+    async def reload_events(self) -> None:
         """ Gets the changed python files list and reloads the events if there are changes """
         self.get_py_files()
         if self.module_changes:
@@ -103,14 +106,16 @@ class EventRegistry:
             self.py_files = self.new_py_files
             self.register_events()
 
-    def get_all_event_handlers(self):
+    def get_all_event_handlers(self) -> KeysView[str]:
+        """ Returns a dict of all event handlers """
         return self.event_handlers.keys()
 
-    def get_event_handlers(self, event):
+    def get_event_handlers(self, event) -> Union[list, None]:
         try:
             return self.event_handlers[event]
         except KeyError:
             print("No event handlers registered for event.")
+            return None
 
 
 event_registry = EventRegistry()

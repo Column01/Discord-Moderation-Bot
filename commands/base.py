@@ -1,8 +1,11 @@
+from bot import ModerationBot
+
+
 class Command:
-    def __init__(self, _):
+    def __init__(self, _: ModerationBot) -> None:
         self.cmd = None
 
-    def register_self(self):
+    def register_self(self) -> None:
         from command_registry import registry
         if isinstance(self.cmd, list):
             for cmd in self.cmd:
@@ -12,7 +15,7 @@ class Command:
         else:
             raise ValueError(f"self.cmd must be of type list[str] or str!. Found type: {type(self.cmd)}")
 
-    def unregister_self(self):
+    def unregister_self(self) -> None:
         from command_registry import registry
         if isinstance(self.cmd, list):
             for cmd in self.cmd:
@@ -22,5 +25,5 @@ class Command:
         else:
             raise ValueError(f"self.cmd must be of type list[str] or str!. Found type: {type(self.cmd)}")
 
-    async def execute(self, *args, **kwargs):
+    async def execute(self, *args, **kwargs) -> None:
         pass

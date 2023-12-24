@@ -2,6 +2,9 @@ import importlib
 import os
 import sys
 
+from typing import Optional
+
+from bot import ModerationBot
 from commands.base import Command
 
 
@@ -13,33 +16,33 @@ class CommandRegistry:
     modules = []
     module_changes = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         print("Initializing the command registry handler. This does not start registering commands!")
         self.get_py_files(overwrite=True)
     
-    def set_instance(self, instance):
+    def set_instance(self, instance: ModerationBot) -> None:
         """ Gives the command registry and instance of the bot """
         self.instance = instance
 
-    def register(self, cmd, instance):
+    def register(self, cmd: str, instance: ModerationBot) -> None:
         """ Method that registers command modules """
         if cmd not in self.commands:
             self.commands[cmd] = instance
         else:
             print("Command Instance already present: " + cmd)
 
-    def unregister(self, cmd):
+    def unregister(self, cmd: str) -> None:
         """ Method to unregister a command module by name """
         try:
             self.commands.pop(cmd)
         except KeyError:
             pass
 
-    def get_command_names(self):
+    def get_command_names(self) -> list:
         """ Gets all the command names """
         return [cmd for cmd, _ in self.commands.items()]
 
-    def get_py_files(self, overwrite=False):
+    def get_py_files(self, overwrite: Optional[bool]=False) -> None:
         """Gets a list of python files in the commands directory, used when reloading
         Args:
             overwrite (bool, optional): Whether to overwrite the py_files class variable. Used for when scripts are being loaded initially. Defaults to False.
@@ -56,7 +59,7 @@ class CommandRegistry:
             if overwrite:
                 self.py_files = new_py_files
 
-    def register_commands(self):
+    def register_commands(self) -> None:
         """ Registers all commands with the bot """
         print("Registering commands...")
         # Clear commands storage
@@ -83,7 +86,7 @@ class CommandRegistry:
                 else:
                     print("Command class in file: {} is not a subclass of the base command class. Please fix this (see repository for details)!".format(fname))
 
-    async def reload_commands(self):
+    async def reload_commands(self) -> None:
         """ Gets the changed python files list and reloads the commands if there are changes """
         self.get_py_files()
         if self.module_changes:
@@ -91,7 +94,7 @@ class CommandRegistry:
             self.py_files = self.new_py_files
             self.register_commands()
 
-    def get_command(self, cmd):
+    def get_command(self, cmd) -> Command:
         """Get a command by it's name
         Args:
             cmd (str): The name of the command to get

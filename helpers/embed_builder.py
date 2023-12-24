@@ -1,9 +1,11 @@
+from typing import Optional
+
 import discord
 
 
 class EmbedBuilder:
     """The Embed builder class, used to wrap the discord embed object to make common embeds easier to use"""
-    def __init__(self, event):
+    def __init__(self, event: str) -> None:
         embeds = {
             "delete": discord.Embed(title="Deleted Message", description="A message was Deleted", color=0xffff00),
             "kick": discord.Embed(title="Kicked user", description="A user was Kicked", color=0xff8000),
@@ -17,8 +19,8 @@ class EmbedBuilder:
             "muteexpire": discord.Embed(title="Temp Mute Expired", description="A user's temp mute expired", color=0x00ff00)
         }
         self.embed = embeds.get(event) or discord.Embed(title=event)
-        
-    async def add_field(self, name, value, inline=False):
+
+    async def add_field(self, name: str, value: str, inline: Optional[bool]=False) -> None:
         """Add a field to the embed
 
         Args:
@@ -28,6 +30,6 @@ class EmbedBuilder:
         """
         self.embed.add_field(name=name, value=value, inline=inline)
 
-    async def get_embed(self):
+    async def get_embed(self) -> discord.Embed:
         """Returns the embed object"""
         return self.embed

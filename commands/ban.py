@@ -3,15 +3,16 @@ import sys
 import time
 
 import discord
+
+from bot import ModerationBot
+from commands.base import Command
 from helpers.embed_builder import EmbedBuilder
 from helpers.misc_functions import (author_is_mod, is_integer,
                                     is_valid_duration, parse_duration)
 
-from commands.base import Command
-
 
 class UnBanCommand(Command):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.cmd = "unban"
         self.client = client_instance
         self.storage = client_instance.storage
@@ -20,7 +21,7 @@ class UnBanCommand(Command):
         self.not_enough_arguments = "You must provide a user to unban. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         command = kwargs.get("args")
         if await author_is_mod(message.author, self.storage):
             if len(command) == 1:
@@ -59,7 +60,7 @@ class UnBanCommand(Command):
     
 
 class TempBanCommand(Command):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.cmd = "ban"
         self.client = client_instance
         self.storage = client_instance.storage
@@ -69,7 +70,7 @@ class TempBanCommand(Command):
         self.not_enough_arguments = "You must provide a user to ban. {usage}"
         self.not_a_user_id = "{user_id} is not a valid user ID. {usage}"
 
-    async def execute(self, message, **kwargs):
+    async def execute(self, message: discord.Message, **kwargs) -> None:
         command = kwargs.get("args")
         if await author_is_mod(message.author, self.storage):
             if len(command) >= 3:

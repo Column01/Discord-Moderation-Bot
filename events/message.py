@@ -2,20 +2,18 @@ import inspect
 import sys
 
 import discord
-from helpers.embed_builder import EmbedBuilder
 
+from bot import ModerationBot
+from helpers.embed_builder import EmbedBuilder
 from events.base import EventHandler
 
 
 class MessageEvent(EventHandler):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.event = "on_message"
     
-    async def handle(self, *args, **kwargs):
-        # Get the message from the args
-        message = args[0]
-
+    async def handle(self, message: discord.Message, *args, **kwargs) -> None:
         # Get the user from the message
         user = message.author
         # Ignore messages from bots or if the message has no text.
@@ -36,14 +34,11 @@ class MessageEvent(EventHandler):
 
 
 class MessageDeleteEvent(EventHandler):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.event = "on_message_delete"
     
-    async def handle(self, *args, **kwargs):
-        # Get the message from the args
-        message = args[0]
-
+    async def handle(self, message: discord.Message, *args, **kwargs) -> None:
         # Ignore deletes of bot messages or messages from ourselves
         if message.author == self.client.user or message.author.bot:
             return

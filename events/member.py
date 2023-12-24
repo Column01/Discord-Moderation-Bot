@@ -3,20 +3,19 @@ import sys
 import time
 
 import discord
-from helpers.embed_builder import EmbedBuilder
 
+from bot import ModerationBot
+from helpers.embed_builder import EmbedBuilder
 from events.base import EventHandler
 
 
 class MemberJoinEvent(EventHandler):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.storage = self.client.storage
         self.event = "on_member_join"
     
-    async def handle(self, *args, **kwargs):
-        # Get member from args
-        member = args[0]
+    async def handle(self, member: discord.abc.User, *args, **kwargs) -> None:
 
         guild = member.guild
         guild_id = str(guild.id)
@@ -53,14 +52,12 @@ class MemberJoinEvent(EventHandler):
 
 
 class MemberBanEvent(EventHandler):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.storage = self.client.storage
         self.event = "on_member_ban"
     
-    async def handle(self, *args, **kwargs):
-        # Get the guild from the args
-        guild = args[0]
+    async def handle(self, guild: discord.Guild, *args, **kwargs) -> None:
 
         guild_id = str(guild.id)
         log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])
@@ -91,14 +88,12 @@ class MemberBanEvent(EventHandler):
 
 
 class MemberKickEvent(EventHandler):
-    def __init__(self, client_instance):
+    def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.storage = self.client.storage
         self.event = "on_member_remove"
     
-    async def handle(self, *args, **kwargs):
-        # Get the guild from the args
-        guild = args[0]
+    async def handle(self, guild: discord.Guild, *args, **kwargs) -> None:
 
         guild_id = str(guild.id)
         log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])

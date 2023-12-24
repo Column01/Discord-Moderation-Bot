@@ -8,7 +8,7 @@ __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file
 
 
 class ModerationBot(discord.Client):
-    def __init__(self, intents):
+    def __init__(self, intents: discord.Intents) -> None:
         # Change to whatever prefix you want
         self.prefix = "!"
         self.prefix_length = len(self.prefix)
@@ -47,7 +47,7 @@ class ModerationBot(discord.Client):
         # Start the discord client
         discord.Client.__init__(self, intents=intents)
     
-    async def event_template(self, *args, **kwargs):
+    async def event_template(self, *args, **kwargs) -> None:
         """ The template event function used to replicate event functions dynamically.
         See event_registry.EventRegistry.register_events() where setattr() is used to add event handlers to this class
         This basically allows us to write one cookie-cutter function instead of implementing the whole discord.py event API
@@ -61,28 +61,26 @@ class ModerationBot(discord.Client):
     
     """ DISCORD CLIENT EVENTS START HERE (DEPRECATED, USE EVENT HANDLERS!) """
                 
-    async def on_guild_join(self, guild):
+    async def on_guild_join(self, guild: discord.Guild) -> None:
         print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
         await self.setup_guild(guild)
     
-    async def on_guild_remove(self, guild):
+    async def on_guild_remove(self, guild: discord.Guild) -> None:
         print(f"Removing guild from guild storage since they removed the bot. Guild name: {guild.name}")
         self.storage.settings.pop(guild.id)
         await self.storage.write_file_to_disk()
         
-    async def on_guild_channel_create(self, channel):
+    async def on_guild_channel_create(self, channel: discord.abc.GuildChannel) -> None:
         guild = channel.guild
         guild_id = str(guild.id)
         muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
         muted_role = discord.utils.get(guild.roles, id=muted_role_id)
         if muted_role is not None:
             await channel.set_permissions(target=muted_role, overwrite=self.muted_permissions)
-        else:
-            return
 
     """ DISCORD CLIENT EVENTS END HERE (DEPRECATED, USE EVENT HANDLERS!) """
     
-    async def setup_guild(self, guild):
+    async def setup_guild(self, guild: discord.Guild) -> None:
         # Add the guild to the settings file if it doesn't exist
         if not await self.storage.has_guild(guild.id):
             await self.storage.add_guild(guild.id)
@@ -93,7 +91,7 @@ class ModerationBot(discord.Client):
         # Create the log channel if it doesn't exist
         await self.create_log_channel(guild)
          
-    async def check_for_muted_role(self, guild):
+    async def check_for_muted_role(self, guild: discord.Guild) -> None:
         guild_id = str(guild.id)
         # Get the muted role ID from disk and try to get it from discord
         muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
@@ -103,10 +101,8 @@ class ModerationBot(discord.Client):
             muted_role = await guild.create_role(name="muted")
             self.storage.settings["guilds"][guild_id]["muted_role_id"] = muted_role.id
             await self.storage.write_file_to_disk()
-        else:
-            return
         
-    async def add_muted_role_to_channels(self, guild):
+    async def add_muted_role_to_channels(self, guild: discord.Guild) -> None:
         guild_id = str(guild.id)
         # Get the muted role ID from disk and then get it from discord
         muted_role_id = int(self.storage.settings["guilds"][guild_id]["muted_role_id"])
@@ -123,7 +119,7 @@ class ModerationBot(discord.Client):
         for voice_channel in guild.voice_channels:
             await voice_channel.set_permissions(target=muted_role, overwrite=self.muted_permissions)
 
-    async def create_log_channel(self, guild):
+    async def create_log_channel(self, guild: discord.Guild) -> None:
         guild_id = str(guild.id)
         # Get the log channel ID from disk and then try to get it from discord
         log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])
@@ -135,8 +131,6 @@ class ModerationBot(discord.Client):
             await log_channel.send("I created this channel for moderation logs. Please edit the channel permissions to allow what users you want to see this channel.")
             self.storage.settings["guilds"][guild_id]["log_channel_id"] = log_channel.id
             await self.storage.write_file_to_disk()
-        else:
-            return
 
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
