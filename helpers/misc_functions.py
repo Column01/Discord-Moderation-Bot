@@ -68,13 +68,13 @@ def parse_duration(string: str) -> int:
     Returns:
         int: The time in seconds of the duration string
     """
-    if is_integer(s):
-        return s
+    if is_integer(string):
+        return string
     else:
         values = {"w": 604800, "d": 86400, "h": 3600, "m": 60, "s": 1}
         nums = []
         tempnums = []
-        for char in s:
+        for char in string:
             if char.isdigit():
                 tempnums.append(char)
             elif char == " " or char is None:
