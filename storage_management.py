@@ -7,7 +7,6 @@ from typing import Union
 class JsonFileManager:
     """ JsonFileManager class handles basic saving and loading of a json based settings file """
     def __init__(self):
-        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         self.file_path = ""
         self.settings = None
 
@@ -63,7 +62,7 @@ class StorageManagement(JsonFileManager):
                 "guilds": {}
             }
             await self.write_file_to_disk()
-    
+
     async def has_guild(self, guild_id) -> bool:
         guild_id = str(guild_id)
         if self.settings["guilds"].get(guild_id) is not None:

@@ -14,7 +14,7 @@ class MemberJoinEvent(EventHandler):
         self.client = client_instance
         self.storage = self.client.storage
         self.event = "on_member_join"
-    
+
     async def handle(self, member: discord.abc.User, *args, **kwargs) -> None:
 
         guild = member.guild
@@ -45,7 +45,7 @@ class MemberJoinEvent(EventHandler):
                 else:
                     # Mute is not expired. Re-add it to the offender
                     await user.add_roles(muted_role, reason="Remuted user since they had an active mute when they rejoined the server")
-        
+
         for user_id in mutes_to_remove:
             self.storage.settings["guilds"][guild_id]["muted_users"].pop(str(user_id))
         await self.storage.write_file_to_disk()
@@ -56,13 +56,13 @@ class MemberBanEvent(EventHandler):
         self.client = client_instance
         self.storage = self.client.storage
         self.event = "on_member_ban"
-    
+
     async def handle(self, guild: discord.Guild, *args, **kwargs) -> None:
 
         guild_id = str(guild.id)
         log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])
         log_channel = guild.get_channel(log_channel_id)
-        
+
         # Get the actions we already logged recently
         logged_actions = []
         async for message in log_channel.history(limit=25):
@@ -70,7 +70,7 @@ class MemberBanEvent(EventHandler):
                 for field in embed.fields:
                     if field.name == "**Audit Log ID**":
                         logged_actions.append(int(field.value.replace("`", "")))
-                        
+
         # Get recent ban actions
         async for entry in guild.audit_logs(action=discord.AuditLogAction.ban, limit=5):
             # If the entry was made by the bot or it's entry ID has already been logged, skip it
@@ -92,13 +92,13 @@ class MemberKickEvent(EventHandler):
         self.client = client_instance
         self.storage = self.client.storage
         self.event = "on_member_remove"
-    
+
     async def handle(self, guild: discord.Guild, *args, **kwargs) -> None:
 
         guild_id = str(guild.id)
         log_channel_id = int(self.storage.settings["guilds"][guild_id]["log_channel_id"])
         log_channel = guild.get_channel(log_channel_id)
-        
+
         # Get the actions we already logged recently
         logged_actions = []
         async for message in log_channel.history(limit=25):

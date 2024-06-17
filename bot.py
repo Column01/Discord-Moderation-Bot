@@ -13,17 +13,10 @@ class ModerationBot(discord.Client):
         self.prefix = "!"
         self.prefix_length = len(self.prefix)
         self.storage = StorageManagement()
-        
+
         # Example of adding a custom config file, see below imported class
         # from storage_management import ConfigManagement
         # self.config = ConfigManagement()
-
-        # Initialize the command registry
-        from command_registry import registry
-        self.registry = registry
-        self.registry.set_instance(self)
-        self.registry.register_commands()
-        print("The bot has been initialized with the following commands: " + ", ".join(self.registry.get_command_names()))
 
         # Initialize event registry
         from event_registry import event_registry
@@ -31,6 +24,13 @@ class ModerationBot(discord.Client):
         self.event_registry.set_instance(self)
         self.event_registry.register_events()
         print("The bot has been initialized with the following events: " + ", ".join(self.event_registry.get_all_event_handlers()))
+
+        # Initialize the command registry
+        from command_registry import registry
+        self.registry = registry
+        self.registry.set_instance(self)
+        self.registry.register_commands()
+        print("The bot has been initialized with the following commands: " + ", ".join(self.registry.get_command_names()))
 
         # Permissions for the muted role and for the default role
         self.muted_permissions = discord.PermissionOverwrite(
@@ -46,7 +46,7 @@ class ModerationBot(discord.Client):
         )
         # Start the discord client
         discord.Client.__init__(self, intents=intents)
-    
+
     async def event_template(self, *args, **kwargs) -> None:
         """ The template event function used to replicate event functions dynamically.
         See event_registry.EventRegistry.register_events() where setattr() is used to add event handlers to this class
@@ -58,18 +58,18 @@ class ModerationBot(discord.Client):
             for event_handler in event_handlers:
                 handler = event_handler(self)
                 await handler.handle(*args, **kwargs)
-    
+
     """ DISCORD CLIENT EVENTS START HERE (DEPRECATED, USE EVENT HANDLERS!) """
-                
+
     async def on_guild_join(self, guild: discord.Guild) -> None:
         print(f"Adding a guild to the bot's system since they invited us. Guild name: {guild.name}")
         await self.setup_guild(guild)
-    
+
     async def on_guild_remove(self, guild: discord.Guild) -> None:
         print(f"Removing guild from guild storage since they removed the bot. Guild name: {guild.name}")
         self.storage.settings.pop(guild.id)
         await self.storage.write_file_to_disk()
-        
+
     async def on_guild_channel_create(self, channel: discord.abc.GuildChannel) -> None:
         guild = channel.guild
         guild_id = str(guild.id)
@@ -79,7 +79,7 @@ class ModerationBot(discord.Client):
             await channel.set_permissions(target=muted_role, overwrite=self.muted_permissions)
 
     """ DISCORD CLIENT EVENTS END HERE (DEPRECATED, USE EVENT HANDLERS!) """
-    
+
     async def setup_guild(self, guild: discord.Guild) -> None:
         # Add the guild to the settings file if it doesn't exist
         if not await self.storage.has_guild(guild.id):
@@ -90,7 +90,7 @@ class ModerationBot(discord.Client):
         await self.add_muted_role_to_channels(guild)
         # Create the log channel if it doesn't exist
         await self.create_log_channel(guild)
-         
+
     async def check_for_muted_role(self, guild: discord.Guild) -> None:
         guild_id = str(guild.id)
         # Get the muted role ID from disk and try to get it from discord
@@ -101,7 +101,7 @@ class ModerationBot(discord.Client):
             muted_role = await guild.create_role(name="muted")
             self.storage.settings["guilds"][guild_id]["muted_role_id"] = muted_role.id
             await self.storage.write_file_to_disk()
-        
+
     async def add_muted_role_to_channels(self, guild: discord.Guild) -> None:
         guild_id = str(guild.id)
         # Get the muted role ID from disk and then get it from discord

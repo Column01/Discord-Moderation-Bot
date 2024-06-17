@@ -12,7 +12,7 @@ class MessageEvent(EventHandler):
     def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.event = "on_message"
-    
+
     async def handle(self, message: discord.Message, *args, **kwargs) -> None:
         # Get the user from the message
         user = message.author
@@ -37,7 +37,7 @@ class MessageDeleteEvent(EventHandler):
     def __init__(self, client_instance: ModerationBot) -> None:
         self.client = client_instance
         self.event = "on_message_delete"
-    
+
     async def handle(self, message: discord.Message, *args, **kwargs) -> None:
         # Ignore deletes of bot messages or messages from ourselves
         if message.author == self.client.user or message.author.bot:
@@ -49,7 +49,7 @@ class MessageDeleteEvent(EventHandler):
         await embed_builder.add_field(name="**Message**", value=f"`{message.content}`")
         await embed_builder.add_field(name="**Created at**", value=f"`{message.created_at}`")
         embed = await embed_builder.get_embed()
-        
+
         # Message the log channel the embed of the deleted message
         guild_id = str(message.guild.id)
         log_channel_id = int(self.client.storage.settings["guilds"][guild_id]["log_channel_id"])

@@ -1,5 +1,7 @@
 from typing import Union
+
 from discord import Member
+
 from storage_management import StorageManagement
 
 
@@ -55,7 +57,7 @@ def is_valid_duration(duration: Union[int, str]) -> bool:
             return False
     else:
         return False
-    
+
 
 def parse_duration(string: str) -> int:
     """Parses a duration in seconds from a duration string
@@ -86,8 +88,8 @@ def parse_duration(string: str) -> int:
             return sum(nums)
         else:
             return -1
-        
-        
+
+
 def author_is_admin(author: Member) -> bool:
     """Checks if the author is an administrator
 

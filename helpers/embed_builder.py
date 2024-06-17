@@ -20,7 +20,7 @@ class EmbedBuilder:
         }
         self.embed = embeds.get(event) or discord.Embed(title=event)
 
-    async def add_field(self, name: str, value: str, inline: Optional[bool]=False) -> None:
+    async def add_field(self, name: str, value: str, inline: Optional[bool] = False) -> None:
         """Add a field to the embed
 
         Args:
