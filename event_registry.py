@@ -1,13 +1,11 @@
+import functools
 import importlib
 import os
 import sys
-import functools
-import asyncio
+from typing import KeysView, Optional, Union
 
 from bot import ModerationBot
 from events.base import EventHandler
-
-from typing import Union, Optional, KeysView, TYPE_CHECKING
 
 
 class EventRegistry:
@@ -46,7 +44,7 @@ class EventRegistry:
         except KeyError:
             pass
 
-    def get_py_files(self, overwrite: Optional[bool]=False) -> None:
+    def get_py_files(self, overwrite: Optional[bool] = False) -> None:
         """Gets a list of python files in the events directory, used when reloading
         Args:
             overwrite (bool, optional): Whether to overwrite the py_files class variable. Used for when scripts are being loaded initially. Defaults to False.
@@ -71,7 +69,8 @@ class EventRegistry:
         # Unload all event modules
         self.modules = [str(m) for m in sys.modules if m.startswith("events.")]
         for module in self.modules:
-            del sys.modules[module]
+            if "base" not in module:
+                del sys.modules[module]
 
         # Get all modules in all events folder, import them and register all events inside of them
         for event_file in self.py_files:
@@ -80,11 +79,11 @@ class EventRegistry:
             if fname == "base":
                 continue
             event_module = importlib.import_module("events.{}".format(fname))
-            classes = event_module.classes
-            for class_info in classes:
-                clazz = class_info[1](self.instance)
-                # Check if the event handler class is an instance of the base event handler
-                if isinstance(type(clazz), type(EventHandler)):
+            classes = dict(event_module.classes)
+            for name, class_ref in classes.items():
+                # Check if the event handler class is a subclass of the base event handler
+                if issubclass(class_ref, EventHandler):
+                    clazz = class_ref(self.instance)
                     clazz.register_self()
                     event_name = clazz.event
                     if event_name is not None:
@@ -94,9 +93,8 @@ class EventRegistry:
                     else:
                         print("Event handler has no event name configured! This is an error and the event will not fire!")
                         clazz.unregister_self()
-                    del clazz
                 else:
-                    print("Event handler class in file: {} is not a subclass of the base event handler class. Please fix this (see repository for details)!".format(fname))
+                    print("Event handler: {} in file: {} is not a subclass of the base event handler class. Please fix this (see repository for details)!".format(name, event_file))
 
     async def reload_events(self) -> None:
         """ Gets the changed python files list and reloads the events if there are changes """

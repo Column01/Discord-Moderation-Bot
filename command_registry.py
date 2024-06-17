@@ -1,7 +1,6 @@
 import importlib
 import os
 import sys
-
 from typing import Optional
 
 from bot import ModerationBot
@@ -19,7 +18,7 @@ class CommandRegistry:
     def __init__(self) -> None:
         print("Initializing the command registry handler. This does not start registering commands!")
         self.get_py_files(overwrite=True)
-    
+
     def set_instance(self, instance: ModerationBot) -> None:
         """ Gives the command registry and instance of the bot """
         self.instance = instance
@@ -42,7 +41,7 @@ class CommandRegistry:
         """ Gets all the command names """
         return [cmd for cmd, _ in self.commands.items()]
 
-    def get_py_files(self, overwrite: Optional[bool]=False) -> None:
+    def get_py_files(self, overwrite: Optional[bool] = False) -> None:
         """Gets a list of python files in the commands directory, used when reloading
         Args:
             overwrite (bool, optional): Whether to overwrite the py_files class variable. Used for when scripts are being loaded initially. Defaults to False.
@@ -67,7 +66,8 @@ class CommandRegistry:
         # Unload all command modules
         self.modules = [str(m) for m in sys.modules if m.startswith("commands.")]
         for module in self.modules:
-            del sys.modules[module]
+            if "base" not in module:
+                del sys.modules[module]
 
         # Get all modules in all command folder, import them and register all commands inside of them
         for command_file in self.py_files:
@@ -76,15 +76,14 @@ class CommandRegistry:
             if fname == "base":
                 continue
             command_module = importlib.import_module("commands.{}".format(fname))
-            classes = command_module.classes
-            for class_info in classes:
-                clazz = class_info[1](self.instance)
-                # Check if the command class is an instance of the base command
-                if isinstance(type(clazz), type(Command)):
+            classes = dict(command_module.classes)
+            for name, class_info in classes.items():
+                # Check if the command class is a subclass of the base command
+                if issubclass(class_info, Command):
+                    clazz = class_info(self.instance)
                     clazz.register_self()
-                    del clazz
                 else:
-                    print("Command class in file: {} is not a subclass of the base command class. Please fix this (see repository for details)!".format(fname))
+                    print("Command class: {} in file: {} is not a subclass of the base command class. Please fix this (see repository for details)!".format(name, command_file))
 
     async def reload_commands(self) -> None:
         """ Gets the changed python files list and reloads the commands if there are changes """
