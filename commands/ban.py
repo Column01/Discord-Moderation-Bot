@@ -76,7 +76,7 @@ class TempBanCommand(Command):
             if len(command) >= 3:
                 if is_integer(command[0]):
                     user_id = int(command[0])
-                    duration = parse_duration(command[1])
+                    duration = int(parse_duration(command[1]))
                     if is_valid_duration(duration):
                         guild_id = str(message.guild.id)
                         ban_duration = int(time.time()) + duration
